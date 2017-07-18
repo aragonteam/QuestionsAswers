@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { StackNavigator, DrawerNavigator } from "react-navigation";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 import QuestionFeed from "./components/QuestionFeed";
 import AnswerFeed from "./components/AnswerFeed";
@@ -13,8 +14,19 @@ const MainDrawerNavigator = DrawerNavigator(
   {
     QuestionFeed: {
       screen: QuestionFeed,
-      navigationOptions: {
-        title: "Feed"
+      navigationOptions: ({ navigation }) => {
+        return {
+          title: "Feed",
+          headerLeft: (
+            <Icon.Button
+              name="bars"
+              backgroundColor="white"
+              color="black"
+              iconStyle={{ alignItems: "center" }}
+              onPress={() => navigation.navigate("DrawerOpen")}
+            />
+          )
+        };
       }
     }
   },
