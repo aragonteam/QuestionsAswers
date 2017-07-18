@@ -18,7 +18,9 @@ class SplashScreen extends Component {
 
   componentDidMount(){
     setTimeout(
-      () => { console.log('I do not leak!'); },
+      () => { 
+        this.props.navigation.navigate('Home');
+      },
       3000
     );
   }
