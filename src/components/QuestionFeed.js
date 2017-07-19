@@ -10,6 +10,8 @@ import {
 import { connect } from "react-redux";
 import data from "../sample/QuestionFeed";
 
+import firebase from '../firebase/firebase'
+
 /**
  * Convert data to ListView DataSource
  */
@@ -18,6 +20,19 @@ const ds = new ListView.DataSource({
 });
 
 class QuestionFeed extends Component {
+  componentWillMount() {
+    var database = firebase.database();
+    database.ref('questions').once('value').then(function(snapshot) {
+
+      console.log('snapshot', snapshot.val())
+
+    });
+    // firebase.database().ref('messages/' + Object.keys(this.props.chatReducer).length).set({ 
+    //   message: messages[0].text,
+    //   sender: messages[0].user._id,
+    //   time: 21481204 
+    // });
+  }
   /**
    * Render Row
    * @param {object} dataRow 
