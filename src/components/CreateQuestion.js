@@ -3,7 +3,13 @@ import { View, Text,StatusBar,TextInput, Image, Button } from "react-native";
 import PhotoUpload from 'react-native-photo-upload'
 
 class CreateQuestion extends Component {
-  state = {};
+//   state = {};
+  constructor(props){
+      super(props)
+      this.state = {
+          count: 0
+      }
+  }
   static navigationOptions =  ({navigation}) => {
         const { goToQuestionFeed } = navigation.state.params || {}
         return {
@@ -33,15 +39,17 @@ class CreateQuestion extends Component {
                         style={{
                             fontSize: 17,
                             color: 'silver',
-                        }}>{this.state.count}
+                        }}>{300 - (this.state.count)}
                     </Text>
                 </View>
-                <View style={{backgroundColor:'white', width:'100%',height: 250}}>
+                <View style={{backgroundColor:'white', width:'100%',height: 145}}>
                   <TextInput onChangeText={(value) => this.countLetters(value) } 
                               editable={true} multiline={true} numberOfLines={5}
+                              maxLength={300}
                               placeholder="Ask something"
+                              autoFocus={true}
                               style={{margin:10, fontSize:17, 
-                                      height:'90%', paddingBottom:0, 
+                                      height:'93%', paddingBottom:0, 
                                       borderWidth: 1, borderColor: '#dcdcdc'}} />
                 </View>
             </View>
@@ -56,10 +64,9 @@ class CreateQuestion extends Component {
                     >
                     <Image
                         style={{
-                        paddingVertical: 30,
-                        width: 150,
-                        height: 150,
-                        borderRadius: 75
+                        paddingVertical: 20,
+                        width: 140,
+                        height: 140,
                         }}
                         resizeMode='cover'
                         source={{
@@ -78,10 +85,9 @@ class CreateQuestion extends Component {
                     >
                     <Image
                         style={{
-                        paddingVertical: 30,
-                        width: 150,
-                        height: 150,
-                        borderRadius: 75
+                        paddingVertical: 20,
+                        width: 140,
+                        height: 140,
                         }}
                         resizeMode='cover'
                         source={{
