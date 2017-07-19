@@ -40,7 +40,7 @@ class QuestionFeed extends Component {
    */
   renderRow(dataRow) {
     return (
-      <View style={styles.itemContainer}>
+      <View style={styles.itemContainer} key={dataRow._id}>
         <TouchableHighlight
           onPress={() =>
             this.props.navigation.navigate("AnswerFeed", { data: dataRow })}

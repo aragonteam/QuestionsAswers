@@ -14,7 +14,7 @@ const data = [
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
-    _id: 1,
+    _id: 2,
     user: {
       _id: 1,
       name: "DungPs",
@@ -28,7 +28,7 @@ const data = [
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
-    _id: 1,
+    _id: 3,
     user: {
       _id: 1,
       name: "DungPs",
@@ -42,7 +42,7 @@ const data = [
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
-    _id: 1,
+    _id: 4,
     user: {
       _id: 1,
       name: "DungPs",
@@ -56,7 +56,7 @@ const data = [
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
-    _id: 1,
+    _id: 5,
     user: {
       _id: 1,
       name: "DungPs",
@@ -70,7 +70,7 @@ const data = [
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
-    _id: 1,
+    _id: 6,
     user: {
       _id: 1,
       name: "DungPs",
@@ -84,7 +84,7 @@ const data = [
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
-    _id: 1,
+    _id: 7,
     user: {
       _id: 1,
       name: "DungPs",
@@ -98,7 +98,7 @@ const data = [
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
-    _id: 1,
+    _id: 8,
     user: {
       _id: 1,
       name: "DungPs",
@@ -112,7 +112,7 @@ const data = [
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
-    _id: 1,
+    _id: 9,
     user: {
       _id: 1,
       name: "DungPs",
@@ -126,7 +126,7 @@ const data = [
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
-    _id: 1,
+    _id: 10,
     user: {
       _id: 1,
       name: "DungPs",
@@ -140,7 +140,7 @@ const data = [
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
-    _id: 1,
+    _id: 11,
     user: {
       _id: 1,
       name: "DungPs",
@@ -154,7 +154,7 @@ const data = [
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
-    _id: 1,
+    _id: 12,
     user: {
       _id: 1,
       name: "DungPs",

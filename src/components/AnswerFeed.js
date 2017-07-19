@@ -14,8 +14,33 @@ class AnswerFeed extends Component {
       title: "Answer"
     };
   };
+
+  /**
+   * Render Answer Item
+   * @param {object} dataRow 
+   */
+  _renderRow(dataRow) {}
+
+  /**
+   * Render Ask Field
+   */
+  _renderFooter() {}
+
+  /**
+   * Render Question detail
+   */
+  _renderHeader() {}
+
   render() {
-    return <ListView enableEmptySections dataSource={ds.cloneWithRows([])} />;
+    return (
+      <ListView
+        enableEmptySections
+        dataSource={ds.cloneWithRows([])}
+        renderFooter={this._renderFooter.bind(this)}
+        renderRow={this._renderRow.bind(this)}
+        renderHeader={this._renderHeader.bind(this)}
+      />
+    );
   }
 }
 
