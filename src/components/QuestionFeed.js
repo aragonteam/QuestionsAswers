@@ -5,9 +5,12 @@ import {
   ListView,
   Image,
   Button,
-  TouchableHighlight
+  TouchableHighlight,
+  RefreshControl
 } from "react-native";
 import { connect } from "react-redux";
+import Icon from "react-native-vector-icons/FontAwesome";
+import ActionButton from "react-native-action-button";
 import data from "../sample/QuestionFeed";
 
 /**
@@ -18,6 +21,19 @@ const ds = new ListView.DataSource({
 });
 
 class QuestionFeed extends Component {
+  state = {
+    refreshing: false
+  };
+  /**
+   * ListView end reached action
+   */
+  _onEndReached() {}
+
+  /**
+   * ListView Refresh action
+   */
+  _onRefresh() {}
+
   /**
    * Render Row
    * @param {object} dataRow 
@@ -25,31 +41,38 @@ class QuestionFeed extends Component {
   renderRow(dataRow) {
     return (
       <View style={styles.itemContainer}>
-        <View style={styles.headWraper}>
-          <View style={styles.imageWraper}>
-            <Image
-              source={{ uri: dataRow.user.avatar }}
-              style={styles.avatarStyle}
-            />
+        <TouchableHighlight
+          onPress={() =>
+            this.props.navigation.navigate("AnswerFeed", { data: dataRow })}
+        >
+          <View>
+            <View style={styles.headWraper}>
+              <View style={styles.imageWraper}>
+                <Image
+                  source={{ uri: dataRow.user.avatar }}
+                  style={styles.avatarStyle}
+                />
+              </View>
+              <View style={styles.userMeta}>
+                <Text>
+                  {dataRow.user.name}
+                </Text>
+                <Text>4 hours ago</Text>
+              </View>
+            </View>
+            <View style={styles.titleWrapperStyle}>
+              <Text style={styles.titleStyle}>
+                {dataRow.title}
+              </Text>
+            </View>
+            {dataRow.content &&
+              <View styles={styles.contentWrapperStyle}>
+                <Text>
+                  {dataRow.content}
+                </Text>
+              </View>}
           </View>
-          <View style={styles.userMeta}>
-            <Text>
-              {dataRow.user.name}
-            </Text>
-            <Text>4 hours ago</Text>
-          </View>
-        </View>
-        <View style={styles.titleWrapperStyle}>
-          <Text style={styles.titleStyle}>
-            {dataRow.title}
-          </Text>
-        </View>
-        {dataRow.content &&
-          <View styles={styles.contentWrapperStyle}>
-            <Text>
-              {dataRow.content}
-            </Text>
-          </View>}
+        </TouchableHighlight>
         <View style={styles.buttonGroupStyle}>
           <View style={styles.buttonWrapper}>
             <TouchableHighlight style={styles.buttonStyle}>
@@ -62,7 +85,10 @@ class QuestionFeed extends Component {
             </TouchableHighlight>
           </View>
           <View style={styles.buttonWrapper}>
-            <TouchableHighlight style={styles.buttonStyle}>
+            <TouchableHighlight
+              style={styles.buttonStyle}
+              onPress={() => this.props.navigation.navigate("CreateAnswer")}
+            >
               <Text>{`${dataRow.answers} answers`}</Text>
             </TouchableHighlight>
           </View>
@@ -76,11 +102,24 @@ class QuestionFeed extends Component {
    */
   render() {
     return (
-      <ListView
-        enableEmptySections
-        dataSource={ds.cloneWithRows(data)}
-        renderRow={this.renderRow}
-      />
+      <View style={{ position: "relative" }}>
+        <ListView
+          enableEmptySections
+          dataSource={ds.cloneWithRows(data)}
+          renderRow={this.renderRow.bind(this)}
+          onEndReached={this._onEndReached.bind(this)}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh.bind(this)}
+            />
+          }
+        />
+        <ActionButton
+          buttonColor="red"
+          onPress={() => this.props.navigation.navigate("CreateQuestion")}
+        />
+      </View>
     );
   }
 }
