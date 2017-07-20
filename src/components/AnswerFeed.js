@@ -1,24 +1,21 @@
 import React, { Component } from "react";
-import { View, Text } from "react-native";
+import { View, Text, ListView } from "react-native";
 
-import firebase from '../firebase/firebase';
+/**
+ * Convert data to ListView DataSource
+ */
+const ds = new ListView.DataSource({
+  rowHasChanged: (r1, r2) => r1 != r2
+});
 
 class AnswerFeed extends Component {
-  state = {};
-
-  componentWillMount(){
-    var database = firebase.database();
-    firebase.database().ref('questions/1').once('value', function(snap) {
-      console.log('I fetched a question!', snap.val());
-    });
-  }
-
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: "Answer"
+    };
+  };
   render() {
-    return (
-      <View>
-        <Text>AnswerFeed</Text>
-      </View>
-    );
+    return <ListView enableEmptySections dataSource={ds.cloneWithRows([])} />;
   }
 }
 
