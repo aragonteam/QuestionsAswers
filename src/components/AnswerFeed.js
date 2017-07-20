@@ -14,6 +14,12 @@ class AnswerFeed extends Component {
       title: "Answer"
     };
   };
+  componentWillMount(){
+    var database = firebase.database();
+    firebase.database().ref('questions/1').once('value', function(snap) {
+      console.log('I fetched a question!', snap.val());
+    });
+  }  
   render() {
     return <ListView enableEmptySections dataSource={ds.cloneWithRows([])} />;
   }

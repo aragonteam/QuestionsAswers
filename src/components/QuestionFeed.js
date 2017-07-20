@@ -24,6 +24,12 @@ class QuestionFeed extends Component {
   state = {
     refreshing: false
   };
+  componentWillMount() {
+    var database = firebase.database();
+    database.ref('questions').once('value').then(function(snapshot) {
+      console.log('snapshot', snapshot.val())
+    });
+  }  
   /**
    * ListView end reached action
    */
