@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+import firebase from "firebase";
 
 const config = {
   apiKey: "AIzaSyDnffU0kFI2fBq4XKAaNEDL1sy_IfvOc3M",
@@ -8,6 +8,7 @@ const config = {
   storageBucket: "aragon-qa.appspot.com",
   messagingSenderId: "450211678584"
 };
+
 firebase.initializeApp(config);
 
 export default firebase;

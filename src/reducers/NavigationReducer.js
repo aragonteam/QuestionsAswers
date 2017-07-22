@@ -13,14 +13,13 @@ const initialState = AppNavigator.router.getStateForAction(
     index: 0,
     actions: [
       NavigationActions.navigate({
-        routeName: "CreateQuestion"
+        routeName: "SplashScreen"
       })
     ]
   })
 );
 
 export default (state = initialState, action) => {
-  console.log(state, action);
   const nextState = AppNavigator.router.getStateForAction(action, state);
 
   return nextState || state;
