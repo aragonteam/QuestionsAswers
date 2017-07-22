@@ -15,6 +15,8 @@ import CreateAnswer from "./components/CreateAnswer";
 import Login from "./components/Login";
 import ReactQuestion from "./components/ReactQuestion";
 
+import { HeaderBackButton } from "react-navigation";
+
 const MainDrawerNavigator = DrawerNavigator(
   {
     QuestionFeed: {
@@ -74,8 +76,13 @@ const routeConfigs = {
   },
   ReactQuestion: {
     screen: AnswerTabNavigator,
-    navigationOptions: {
-      title: "Who reacted this question"
+    navigationOptions: ({ navigation }) => {
+      return {
+        title: "Who reacted this question",
+        headerLeft: (
+          <HeaderBackButton onPress={() => navigation.navigate("AnswerFeed")} />
+        )
+      };
     }
   },
   // Home Screen (include: Drawer + Question Feed)

@@ -9,6 +9,7 @@ import {
   Platform
 } from "react-native";
 import { Icon } from "react-native-elements";
+import { HeaderBackButton } from "react-navigation";
 import data from "../sample/AnswerFeed";
 
 /**
@@ -24,20 +25,31 @@ class AnswerFeed extends Component {
       Platform.OS === "android" ? TouchableNativeFeedback : TouchableHighlight;
     return {
       title: "Answer",
+      headerLeft: (
+        <HeaderBackButton onPress={() => navigation.navigate("Home")} />
+      ),
       headerTitle: (
         <ReactButton onPress={() => navigation.navigate("ReactQuestion")}>
-          <Text>{`100 reacted`}</Text>
+          <Text style={styles.headerTitle}>{`100 reacted`}</Text>
         </ReactButton>
       )
     };
   };
+
+  /**
+   * Upvote and Downvote action
+   * @param {int|string} answerID 
+   * @param {string} type 
+   */
+  _voteAction(answerID, type = "up") {}
+
   /**
    * Render Answer Item
    * @param {object} dataRow 
    */
-  _renderRow(dataRow) {
+  _renderRow(dataRow, sectionID, rowId) {
     return (
-      <View style={{ flexDirection: "row", flex: 1, padding: 10 }}>
+      <View style={styles.wrapItem} key={rowId}>
         <View style={{ flex: 0.1 }}>
           <Image
             source={{
@@ -48,18 +60,28 @@ class AnswerFeed extends Component {
           />
         </View>
         <View style={{ flex: 0.5 }}>
-          <View>
-            <Text>DungPS</Text>
-            <Text>4 hours ago</Text>
+          <View style={styles.itemHead}>
+            <Text style={styles.userNameStyle}>DungPS</Text>
+            <Text style={styles.timeDiffStyle}>4 hours ago</Text>
           </View>
           <Text>
             {dataRow.content}
           </Text>
         </View>
         <View style={{ flex: 0.05 }}>
-          <Icon type="font-awesome" name="chevron-up" size={18} />
+          <Icon
+            type="font-awesome"
+            name="chevron-up"
+            size={18}
+            onPress={() => this._voteAction(rowId, "up")}
+          />
           <Text>+19</Text>
-          <Icon type="font-awesome" name="chevron-down" size={18} />
+          <Icon
+            type="font-awesome"
+            name="chevron-down"
+            size={18}
+            onPress={() => this._voteAction(rowId, "down")}
+          />
         </View>
       </View>
     );
@@ -77,7 +99,11 @@ class AnswerFeed extends Component {
 
   render() {
     return (
-      <View>
+      <View
+        style={{
+          backgroundColor: "white"
+        }}
+      >
         <ListView
           enableEmptySections
           dataSource={ds.cloneWithRows(data)}
@@ -96,6 +122,31 @@ const styles = {
     height: 48,
     borderRadius: 50,
     borderWidth: 1
+  },
+  wrapItem: {
+    flexDirection: "row",
+    flex: 1,
+    padding: 10,
+    marginBottom: 5
+  },
+  headerTitle: {
+    fontSize: Platform.OS === "ios" ? 17 : 20,
+    fontWeight: Platform.OS === "ios" ? "600" : "500",
+    color: "rgba(0, 0, 0, .9)",
+    textAlign: Platform.OS === "ios" ? "center" : "left",
+    marginHorizontal: 16
+  },
+  itemHead: {
+    flexDirection: "row",
+    flex: 1
+  },
+  userNameStyle: {
+    // alignSelf: "left"
+    fontWeight: "bold"
+  },
+  timeDiffStyle: {
+    // alignSelf: "left"
+    marginLeft: 5
   }
 };
 
