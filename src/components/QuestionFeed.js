@@ -15,13 +15,10 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import ActionButton from "react-native-action-button";
 import data from "../sample/QuestionFeed";
 
-<<<<<<< HEAD
-import firebase from "../firebase/firebase";
+import firebaseApp from "../firebase/firebase";
 
 import { getQuestions } from "../actions";
 
-=======
->>>>>>> origin/dev
 /**
  * Convert data to ListView DataSource
  */
