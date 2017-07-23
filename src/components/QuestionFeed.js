@@ -5,69 +5,162 @@ import {
   ListView,
   Image,
   Button,
-  TouchableHighlight
+  TouchableHighlight,
+  TouchableNativeFeedback,
+  RefreshControl,
+  Platform
 } from "react-native";
 import { connect } from "react-redux";
+import Icon from "react-native-vector-icons/FontAwesome";
+import ActionButton from "react-native-action-button";
 import data from "../sample/QuestionFeed";
+
+import firebaseApp from "../firebase/firebase";
+
+import { getQuestions } from "../actions";
 
 /**
  * Convert data to ListView DataSource
  */
 const ds = new ListView.DataSource({
-  rowHasChanged: (r1, r2) => r1 != r2
+  rowHasChanged: (r1, r2) => r1 !== r2
 });
 
 class QuestionFeed extends Component {
+  state = {
+    refreshing: false,
+    isLoading: true,
+    lastKey: 0,
+    isGet: false
+  };
+  
+  componentWillMount() {
+    this.setState(
+      {
+        isGet: true
+      },
+      () => {
+        this.props.getQuestions().then(() => {
+          this.setState({
+            isLoading: false,
+            isGet: false
+          });
+        });
+      }
+    );
+  }
+  /**
+   * ListView end reached action
+   */
+  _onEndReached() {
+    // if (this.state.isGet) return;
+
+    this.setState(
+      {
+        isGet: true
+      },
+      () => {
+        this.props.getQuestions(this.props.questions.posts.length).then(() =>
+          this.setState({
+            isGet: false
+          })
+        );
+      }
+    );
+  }
+
+  /**
+   * ListView Refresh action
+   */
+  _onRefresh() {
+    this.setState(
+      {
+        refreshing: true,
+        isGet: true
+      },
+      () => {
+        this.props.getQuestions().then(() => {
+          this.setState({
+            refreshing: false,
+            isGet: false
+          });
+        });
+      }
+    );
+  }
+
   /**
    * Render Row
    * @param {object} dataRow 
    */
-  renderRow(dataRow) {
+  renderRow(dataRow, sectionID, rowID) {
+    const Component =
+      Platform.OS == "android" ? TouchableNativeFeedback : TouchableHighlight;
     return (
-      <View style={styles.itemContainer}>
-        <View style={styles.headWraper}>
-          <View style={styles.imageWraper}>
-            <Image
-              source={{ uri: dataRow.user.avatar }}
-              style={styles.avatarStyle}
-            />
+      <View style={styles.itemContainer} key={sectionID}>
+        <Component
+          onPress={() =>
+            this.props.navigation.navigate("AnswerFeed", { data: dataRow })}
+        >
+          <View>
+            <View style={styles.headWraper}>
+              <View style={styles.imageWraper}>
+                <Image
+                  source={{
+                    uri:
+                      "http://walyou.com/wp-content/uploads//2010/12/facebook-profile-picture-no-pic-avatar.jpg"
+                  }}
+                  style={styles.avatarStyle}
+                />
+              </View>
+              <View style={styles.userMeta}>
+                <Text>DungPS</Text>
+                <Text>4 hours ago</Text>
+              </View>
+            </View>
+            <View style={styles.titleWrapperStyle}>
+              <Text style={styles.titleStyle}>
+                {dataRow.title}
+              </Text>
+            </View>
+            {dataRow.description &&
+              <View style={styles.contentWrapperStyle}>
+                <Text>
+                  {dataRow.description}
+                </Text>
+              </View>}
           </View>
-          <View style={styles.userMeta}>
-            <Text>
-              {dataRow.user.name}
-            </Text>
-            <Text>4 hours ago</Text>
-          </View>
-        </View>
-        <View style={styles.titleWrapperStyle}>
-          <Text style={styles.titleStyle}>
-            {dataRow.title}
-          </Text>
-        </View>
-        {dataRow.content &&
-          <View styles={styles.contentWrapperStyle}>
-            <Text>
-              {dataRow.content}
-            </Text>
-          </View>}
+        </Component>
         <View style={styles.buttonGroupStyle}>
           <View style={styles.buttonWrapper}>
-            <TouchableHighlight style={styles.buttonStyle}>
-              <Text>{`${dataRow.yes} Yes`}</Text>
-            </TouchableHighlight>
+            <Component style={styles.buttonStyle}>
+              <Text>{`${dataRow.yes_number} Yes`}</Text>
+            </Component>
           </View>
           <View style={styles.buttonWrapper}>
-            <TouchableHighlight style={styles.buttonStyle}>
-              <Text>{`${dataRow.no} No`}</Text>
-            </TouchableHighlight>
+            <Component style={styles.buttonStyle}>
+              <Text>{`${dataRow.no_number} No`}</Text>
+            </Component>
           </View>
           <View style={styles.buttonWrapper}>
-            <TouchableHighlight style={styles.buttonStyle}>
-              <Text>{`${dataRow.answers} answers`}</Text>
-            </TouchableHighlight>
+            <Component
+              style={styles.buttonStyle}
+              onPress={() => this.props.navigation.navigate("CreateAnswer")}
+            >
+              <Text>{`${dataRow.other_number} answers`}</Text>
+            </Component>
           </View>
         </View>
       </View>
+    );
+  }
+
+  renderRefreshControl() {
+    return (
+      <RefreshControl
+        refreshing={this.state.refreshing}
+        onRefresh={this._onRefresh.bind(this)}
+      />
     );
   }
 
@@ -75,12 +168,19 @@ class QuestionFeed extends Component {
    * Render View
    */
   render() {
+    // console.log("questions", this.props.questions.posts);
     return (
-      <ListView
-        enableEmptySections
-        dataSource={ds.cloneWithRows(data)}
-        renderRow={this.renderRow}
-      />
+      <View style={{ position: "relative" }}>
+        <ListView
+          enableEmptySections
+          dataSource={ds.cloneWithRows(data)}
+          renderRow={this.renderRow.bind(this)}
+        />
+        <ActionButton
+          buttonColor="red"
+          onPress={() => this.props.navigation.navigate("CreateQuestion")}
+        />
+      </View>
     );
   }
 }
@@ -139,4 +239,10 @@ const styles = {
   }
 };
 
-export default connect()(QuestionFeed);
+const mapStateToProps = state => {
+  return {
+    questions: state.questions
+  };
+};
+
+export default connect(mapStateToProps, { getQuestions })(QuestionFeed);

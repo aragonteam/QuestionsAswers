@@ -1,0 +1,22 @@
+[
+  {
+    "question_id": 0,
+    "user_id": 10,
+    "text_content": "abc",
+    "image_content": "jpg",
+    "upvote_number": 1000,
+    "downvote_number": 200,
+    "created_time": 1080980,
+    "answer_type": "yes"
+  },
+  {
+    "question_id": 0,
+    "user_id": 11,
+    "text_content": "def",
+    "image_content": "png",
+    "upvote_number": 800,
+    "downvote_number": 100,
+    "created_time": 1080110,
+    "answer_type": "no"
+  }    
+]

@@ -2,19 +2,19 @@ import React, { Component } from "react";
 import { View, Text,StatusBar,TextInput, Image, Button } from "react-native";
 import PhotoUpload from 'react-native-photo-upload'
 
-import firebaseApp from './firebase'
+import firebaseApp from '../firebase/firebase'
 
 class CreateQuestion extends Component {
   constructor(props){
-      super(props)
+      super(props);
       this.questionsRef = firebaseApp.database().ref('questions');
       this.state = {
           count: 0, 
           questions: [],
           title: "", 
           image: "", 
-      }
-      this.writeDB = this.writeDB.bind(this)
+      };
+      this.writeDB = this.writeDB.bind(this);
   }
 
   writeDB() {

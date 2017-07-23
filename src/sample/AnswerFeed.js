@@ -10,7 +10,7 @@ const data = [
     yes: 100,
     no: 100,
     answers: 100,
-    title: "Can D.Trump make American greate again?",
+    content: "Can D.Trump make American greate again?",
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
@@ -24,7 +24,7 @@ const data = [
     yes: 100,
     no: 100,
     answers: 100,
-    title: "Can D.Trump make American greate again?",
+    content: "Can D.Trump make American greate again?",
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
@@ -38,7 +38,7 @@ const data = [
     yes: 100,
     no: 100,
     answers: 100,
-    title: "Can D.Trump make American greate again?",
+    content: "Can D.Trump make American greate again?",
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
@@ -52,7 +52,7 @@ const data = [
     yes: 100,
     no: 100,
     answers: 100,
-    title: "Can D.Trump make American greate again?",
+    content: "Can D.Trump make American greate again?",
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
@@ -66,7 +66,7 @@ const data = [
     yes: 100,
     no: 100,
     answers: 100,
-    title: "Can D.Trump make American greate again?",
+    content: "Can D.Trump make American greate again?",
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
@@ -80,7 +80,7 @@ const data = [
     yes: 100,
     no: 100,
     answers: 100,
-    title: "Can D.Trump make American greate again?",
+    content: "Can D.Trump make American greate again?",
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
@@ -94,7 +94,7 @@ const data = [
     yes: 100,
     no: 100,
     answers: 100,
-    title: "Can D.Trump make American greate again?",
+    content: "Can D.Trump make American greate again?",
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
@@ -108,7 +108,7 @@ const data = [
     yes: 100,
     no: 100,
     answers: 100,
-    title: "Can D.Trump make American greate again?",
+    content: "Can D.Trump make American greate again?",
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
@@ -122,7 +122,7 @@ const data = [
     yes: 100,
     no: 100,
     answers: 100,
-    title: "Can D.Trump make American greate again?",
+    content: "Can D.Trump make American greate again?",
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
@@ -136,7 +136,7 @@ const data = [
     yes: 100,
     no: 100,
     answers: 100,
-    title: "Can D.Trump make American greate again?",
+    content: "Can D.Trump make American greate again?",
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
@@ -150,7 +150,7 @@ const data = [
     yes: 100,
     no: 100,
     answers: 100,
-    title: "Can D.Trump make American greate again?",
+    content: "Can D.Trump make American greate again?",
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   },
   {
@@ -164,7 +164,7 @@ const data = [
     yes: 100,
     no: 100,
     answers: 100,
-    title: "Can D.Trump make American greate again?",
+    content: "Can D.Trump make American greate again?",
     img: "https://www.w3schools.com/css/img_fjords.jpg"
   }
 ];
