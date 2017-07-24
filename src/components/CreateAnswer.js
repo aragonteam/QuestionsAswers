@@ -28,6 +28,8 @@ class CreateAnswer extends Component {
         }
         answers.push({created_time: currentTime, 
                                                 text_content: _text_content, 
+                                                answerType: "other",
+                                                comments: {},
                                                 image_content: img, 
                                                 downvote_number: 0, 
                                                 upvote_number: 0, 
@@ -51,7 +53,6 @@ class CreateAnswer extends Component {
     })
  }
  goToAnswerFeed(){
-    alert("AnwerFeed")
     this.writeDB();
     this.props.navigation.navigate('AnswerFeed')
 }
