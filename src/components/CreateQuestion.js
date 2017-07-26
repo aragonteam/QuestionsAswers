@@ -72,41 +72,38 @@ class CreateQuestion extends Component {
                         }}>{300 - (this.state.count)}
                     </Text>
                 </View>
-                <View style={{backgroundColor:'white', width:'100%',height: 145}}>
+                <View style={{backgroundColor:'white', width:'100%',height: 250}}>
                   <TextInput onChangeText={(value) => this.countLetters(value) } 
                               editable={true} multiline={true} numberOfLines={5}
                               maxLength={300}
                               placeholder="Ask something"
                               autoFocus={true}
                               style={{margin:10, fontSize:17, 
-                                      height:'93%', paddingBottom:0, 
+                                      height:'95%', paddingBottom:0, 
                                       borderWidth: 1, borderColor: '#dcdcdc'}} />
                 </View>
             </View>
-            <View style={{flexDirection: 'row', backgroundColor:'white'}}>
-                <View style={{backgroundColor:'white', width:'50%',height: 200}}>
+            
+            <View style={{alignItems: 'flex-start', paddingLeft: 10}}>
                 <PhotoUpload
                     onPhotoSelect={avatar => {
                         if (avatar) {
-                        console.log('Image base64 string: ', avatar)
-                        this.setState({
-                            image : "data:image/png;base64," + avatar
-                        })
+                            console.log('Image base64 string: ', avatar)
+                            this.setState({
+                                image : "data:image/png;base64," + avatar
+                            })
                         }
                     }}>
                     <Image
                         style={{
-                        paddingVertical: 20,
-                        width: 140,
-                        height: 140,
+                            paddingTop: 30,
+                            width: 40,
+                            height: 40,
                         }}
                         resizeMode='cover'
-                        source={{
-                            uri: 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
-                            }}
+                        source={require('../resources/icon_image.png')}
                     />
                 </PhotoUpload> 
-            </View> 
         </View>   
     </View>
     );
