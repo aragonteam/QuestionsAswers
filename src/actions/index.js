@@ -1,4 +1,4 @@
-import firebase from "../firebase/firebase";
+import firebaseApp from "../firebase/firebase";
 import _ from "lodash";
 import { GET_QUESTION_FEED, GET_NEW_QUESTION_FEED } from "./types";
 
@@ -10,7 +10,7 @@ export const getQuestions = (lastKey = 0) => {
       });
     }
 
-    const database = firebase.database();
+    const database = firebaseApp.database();
     return database
       .ref("questions")
       .once("value")
