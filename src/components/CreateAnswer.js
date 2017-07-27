@@ -7,6 +7,7 @@ import firebaseApp from '../firebase/firebase'
 class CreateAnswer extends Component {
   constructor(props){
       super(props);
+      this
       this.anwersRef = firebaseApp.database().ref('questions/0/answers');
       this.state = {
           count: 0, 
@@ -28,12 +29,11 @@ class CreateAnswer extends Component {
         }
         answers.push({created_time: currentTime, 
                                                 text_content: _text_content, 
-                                                answerType: "other",
+                                                answerType: "neutral",
                                                 comments: {},
                                                 image_content: img, 
                                                 downvote_number: 0, 
                                                 upvote_number: 0, 
-                                                other_number: 0, 
                                                 question_id: 0,
                                                 user_id: "Anonymous"})
         return answers;
@@ -106,6 +106,9 @@ class CreateAnswer extends Component {
                                        height:'95%', paddingBottom:0,  
                                       }} />
                 </View>
+                <Text>
+                  if 
+                </Text>
             </View>
     </View>
     );
