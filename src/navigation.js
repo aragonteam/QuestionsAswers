@@ -17,53 +17,21 @@ import ReactQuestion from "./components/ReactQuestion";
 
 import { HeaderBackButton } from "react-navigation";
 
-const MainDrawerNavigator = DrawerNavigator(
+const MainDrawerNavigator = TabNavigator(
   {
     QuestionFeed: {
-      screen: QuestionFeed,
-      navigationOptions: ({ navigation }) => {
-        return {
-          title: "Feed",
-          headerLeft: (
-            <Icon.Button
-              name="bars"
-              backgroundColor="white"
-              color="black"
-              iconStyle={{ alignItems: "center" }}
-              onPress={() => navigation.navigate("DrawerOpen")}
-            />
-          )
-        };
-      }
+      screen: QuestionFeed
+    },
+    Login: {
+      screen: Login
     }
   },
   {
     initialRouteName: "QuestionFeed",
-    contentOptions: {
-      activeTintColor: "#e91e63"
-    }
-  }
-);
-
-const AnswerTabNavigator = TabNavigator(
-  {
-    AnswerAllScreen: {
-      screen: ReactQuestion
-    },
-    AnswerYesScreen: {
-      screen: ReactQuestion
-    },
-    AnswerNoScreen: {
-      screen: ReactQuestion
-    }
-  },
-  {
+    tabBarPosition: 'bottom',
     tabBarOptions: {
-      labelStyle: {
-        color: "black"
-      },
       style: {
-        backgroundColor: "white"
+        backgroundColor: '#060a25'
       }
     }
   }
@@ -73,17 +41,6 @@ const routeConfigs = {
   // Answer Feed Screen
   AnswerFeed: {
     screen: AnswerFeed
-  },
-  ReactQuestion: {
-    screen: AnswerTabNavigator,
-    navigationOptions: ({ navigation }) => {
-      return {
-        title: "Who reacted this question",
-        headerLeft: (
-          <HeaderBackButton onPress={() => navigation.navigate("AnswerFeed")} />
-        )
-      };
-    }
   },
   // Home Screen (include: Drawer + Question Feed)
   Home: {

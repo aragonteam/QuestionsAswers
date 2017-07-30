@@ -12,13 +12,13 @@ class App extends Component {
     this.state = {
       isLoading: true,
       store:
-        module && module.hot && module.hot.data && module.hot.data.store
-          ? module.hot.data.store
-          : configureStore(() => {
-              this.setState({
-                isLoading: false
-              });
-            })
+      module && module.hot && module.hot.data && module.hot.data.store
+        ? module.hot.data.store
+        : configureStore(() => {
+          this.setState({
+            isLoading: false
+          });
+        })
     };
   }
 
