@@ -103,6 +103,10 @@ class CreateQuestion extends Component {
       let dropdown_icon = this.state.dropdown_icon_heart ? require('../resources/heart.png') : require('../resources/uncheck.png')
     return (
       <View style={{flex:1}}>
+          <StatusBar
+            backgroundColor= "yellow"
+            barStyle="light-content"
+          />
             <View style={{paddingTop: 5,backgroundColor: 'white'}}>
                 <View style={{marginTop: 20, height: 20}}>
                     <PhotoUpload
@@ -135,7 +139,6 @@ class CreateQuestion extends Component {
                               autoFocus={true}
                               style={{margin:10, fontSize:17, 
                                       height:'85%', paddingBottom:0, 
-                                      textAlign: 'center'
                                       }} />
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>

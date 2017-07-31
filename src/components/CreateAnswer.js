@@ -8,7 +8,7 @@ class CreateAnswer extends Component {
   constructor(props){
       super(props);
       this
-      this.anwersRef = firebaseApp.database().ref('questions/0/answers');
+      this.anwersRef = firebaseApp.database().ref('questions/1/answers');
       this.state = {
           count: 0, 
           answers: [],
@@ -19,7 +19,9 @@ class CreateAnswer extends Component {
   }
 
   writeDB() {
-    let currentTime = new Date().toDateString()//.toLocaleString()
+    var date = new Date();
+    var milliseconds = date.getTime();
+    var currentTime = milliseconds / 1000;
     let _text_content = this.state.title
     let img = this.state.image
     
