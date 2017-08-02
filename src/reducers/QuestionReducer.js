@@ -9,7 +9,7 @@ export default (state = initialState, action) => {
     case GET_NEW_QUESTION_FEED:
       return { ...state, posts: [] };
     case GET_QUESTION_FEED:
-      return { ...state, posts: state.posts.concat(action.payload) };
+      return { ...state, posts: action.payload };
     default:
       return state;
   }

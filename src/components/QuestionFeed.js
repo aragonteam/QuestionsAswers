@@ -70,12 +70,14 @@ class QuestionFeed extends Component {
 
     if (data.answers) {
       result.all = Object.keys(data.answers).length;
-      if (result.all > 0) {
+      if (result.all > 0 && !_.isEmpty(data.answers)) {
         _.forEach(data.answers, (v) => {
-          if (v.answer_type === "no") {
-            ++result.no;
-          } else if (v.answer_type === 'yes') {
-            ++result.yes;
+          if (v && v.answerType) {
+            if (v.answerType == data.option1) {
+              result.yes = result.yes + 1;
+            } else if (v.answerType == data.option2) {
+              result.no = result.no + 1;
+            }
           }
         })
 
@@ -108,7 +110,7 @@ class QuestionFeed extends Component {
     const { yes, no, all, yesPercent, noPercent, otherPercent } = this._getAnswerObject(rowData);
     const Touchable = Platform.OS == 'android' ? TouchableNativeFeedback : TouchableHighlight;
     return (
-      <Touchable onPress={() => this.props.navigation.navigate("AnswerFeed", { data: rowData })}>
+      <Touchable onPress={() => this.props.navigation.navigate("AnswerFeed", { data: rowData })} key={rowID}>
         <RkCard rkType="imgBlock" style={{ marginVertical: 8, backgroundColor: '#12194d' }}>
           {this._renderImage(rowData)}
           <View rkCardImgOverlay rkCardContent style={{ height: 85 }}>
@@ -118,10 +120,10 @@ class QuestionFeed extends Component {
           <View style={{ padding: 20 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', flex: 1 }}>
               <View style={{ marginRight: 10, justifyContent: 'center', flex: 1, borderRightWidth: 1, borderRightColor: '#ddd' }}>
-                <RkButton rkType="clear">{`${yes == 0 ? '' : yes} Yes`}</RkButton>
+                <RkButton rkType="clear">{`${yes == 0 ? '' : yes} ${rowData.option1}`}</RkButton>
               </View>
               <View style={{ flex: 1, justifyContent: 'center' }}>
-                <RkButton rkType="clear">{`${no == 0 ? '' : no} No`}</RkButton>
+                <RkButton rkType="clear">{`${no == 0 ? '' : no} ${rowData.option2}`}</RkButton>
               </View>
             </View>
           </View>
