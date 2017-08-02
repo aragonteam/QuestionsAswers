@@ -97,7 +97,7 @@ class AnswerFeed extends Component {
             <Text style={styles.timeDiffStyle}>4 hours ago</Text>
           </View>
           <Text style={{ color: 'white' }}>
-            {dataRow && dataRow.text_content}
+            {dataRow && dataRow.content_text}
           </Text>
         </View>
         <View style={{ flex: 0.05 }}>
