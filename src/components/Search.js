@@ -41,9 +41,6 @@ class Search extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: "Search",
-      header: {
-        bar: null
-      },
       headerTitleStyle: {
         color: '#fff',
         alignItems: 'center'
