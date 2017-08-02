@@ -37,13 +37,10 @@ class SplashScreen extends Component {
           }}
         >
           <Image
-            source={require("../res/twitter_logo.png")}
+            source={require("../res/qa_logo.png")}
             style={styles.logo}
           />
-          <Text style={styles.slogan}>Connect with your friends</Text>
-          <TouchableOpacity style={styles.button} onPress={() => {}}>
-            <Text style={styles.buttonText}>Login</Text>
-          </TouchableOpacity>
+          <Text style={styles.slogan}>Ideas Worth Spreadings</Text>
         </View>
       </ScrollView>
     );
@@ -76,8 +73,8 @@ const styles = StyleSheet.create({
     color: "#B0B0B0"
   },
   logo: {
-    width: 180,
-    height: 146
+    width: 482,
+    height: 184
   }
 });
 
