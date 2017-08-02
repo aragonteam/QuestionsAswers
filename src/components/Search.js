@@ -30,7 +30,7 @@ const ds = new ListView.DataSource({
   rowHasChanged: (r1, r2) => r1 !== r2
 });
 
-class QuestionFeed extends Component {
+class Search extends Component {
   state = {
     refreshing: false,
     isLoading: true,
@@ -40,7 +40,10 @@ class QuestionFeed extends Component {
 
   static navigationOptions = ({ navigation }) => {
     return {
-      title: "Home",
+      title: "Search",
+      header: {
+        bar: null
+      },
       headerTitleStyle: {
         color: '#fff',
         alignItems: 'center'
@@ -164,4 +167,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { getQuestions })(QuestionFeed);
+export default connect(mapStateToProps, { getQuestions })(Search);

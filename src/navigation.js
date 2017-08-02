@@ -14,6 +14,7 @@ import Introduction from "./components/Introduction";
 import CreateAnswer from "./components/CreateAnswer";
 import Login from "./components/Login";
 import ReactQuestion from "./components/ReactQuestion";
+import Search from './components/Search';
 
 import { HeaderBackButton } from "react-navigation";
 
@@ -21,6 +22,9 @@ const MainDrawerNavigator = TabNavigator(
   {
     QuestionFeed: {
       screen: QuestionFeed
+    },
+    Search: {
+      screen: Search
     },
     Login: {
       screen: Login
