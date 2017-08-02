@@ -73,8 +73,8 @@ const styles = StyleSheet.create({
     color: "#B0B0B0"
   },
   logo: {
-    width: 482,
-    height: 184
+    width: 200,
+    height: 76
   }
 });
 
