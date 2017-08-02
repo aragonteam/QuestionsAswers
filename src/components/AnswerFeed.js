@@ -6,7 +6,8 @@ import {
   Image,
   TouchableHighlight,
   TouchableNativeFeedback,
-  Platform
+  Platform,
+  Button
 } from "react-native";
 import { Icon } from "react-native-elements";
 import { RkTabView, RkCard, RkText } from 'react-native-ui-kitten';
@@ -27,6 +28,9 @@ class AnswerFeed extends Component {
       headerTitleStyle: {
         color: '#fff'
       },
+      headerRight: (
+        <Button title="Answer" onPress={() => navigation.navigate('CreateAnswer')} />
+      )
     };
   };
 
