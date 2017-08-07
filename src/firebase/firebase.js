@@ -9,6 +9,15 @@ const config = {
   messagingSenderId: "450211678584"
 };
 
+// var config = {
+//   apiKey: "AIzaSyBi1QHW9hpJXABa-9YPnV-Y1MFGmZffMlI",
+//   authDomain: "nearby-d5d5f.firebaseapp.com",
+//   databaseURL: "https://nearby-d5d5f.firebaseio.com",
+//   projectId: "nearby-d5d5f",
+//   storageBucket: "nearby-d5d5f.appspot.com",
+//   messagingSenderId: "498513684386"
+// };
+
 const firebaseApp = firebase.initializeApp(config);
 
 export default firebaseApp;

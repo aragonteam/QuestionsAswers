@@ -14,7 +14,7 @@ export const getQuestions = (lastKey = 0) => {
         if (!_.isEmpty(rows) || !_.isNull(rows)) {
           dispatch({
             type: GET_QUESTION_FEED,
-            payload: rows
+            payload: rows.reverse()
           });
         }
       });

@@ -10,26 +10,38 @@ import {
   Button
 } from "react-native";
 import { Icon } from "react-native-elements";
-import { RkTabView, RkCard, RkText } from 'react-native-ui-kitten';
+import { RkTabView, RkCard, RkText } from "react-native-ui-kitten";
 import { HeaderBackButton } from "react-navigation";
 import data from "../sample/AnswerFeed";
-import _ from 'lodash';
+import _ from "lodash";
 
 class AnswerFeed extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: navigation.state.params.data.title,
       headerLeft: (
-        <HeaderBackButton onPress={() => navigation.navigate("Home")} tintColor="white" />
+        <HeaderBackButton
+          onPress={() => navigation.navigate("Home")}
+          tintColor="white"
+        />
       ),
       headerStyle: {
-        backgroundColor: '#090e36'
+        backgroundColor: "#090e36"
       },
       headerTitleStyle: {
-        color: '#fff'
+        color: "#fff"
       },
       headerRight: (
-        <Button title="Answer" onPress={() => navigation.navigate('CreateAnswer')} />
+        <Button
+          title="Answer"
+          onPress={() =>
+            navigation.navigate("CreateAnswer", {
+              qID: navigation.state.params.qID,
+              rowID: navigation.state.params.rowID,
+              lastkey: Object.keys(navigation.state.params.data.answers || {})
+                .length
+            })}
+        />
       )
     };
   };
@@ -46,13 +58,13 @@ class AnswerFeed extends Component {
       option1: [],
       option2: [],
       all: []
-    }
+    };
 
     const data = this.props.navigation.state.params.data;
 
     if (data.answers) {
       if (!_.isEmpty(data.answers)) {
-        _.forEach(data.answers, (v) => {
+        _.forEach(data.answers, v => {
           result.all.push(v);
           if (v && v.answerType) {
             if (v.answerType == data.option1) {
@@ -61,7 +73,7 @@ class AnswerFeed extends Component {
               result.option2.push(2);
             }
           }
-        })
+        });
       }
     }
 
@@ -73,7 +85,7 @@ class AnswerFeed extends Component {
    * @param {int|string} answerID 
    * @param {string} type 
    */
-  _voteAction(answerID, type = "up") { }
+  _voteAction(answerID, type = "up") {}
 
   /**
    * Render Answer Item
@@ -86,7 +98,7 @@ class AnswerFeed extends Component {
           <Image
             source={{
               uri:
-              "http://walyou.com/wp-content/uploads//2010/12/facebook-profile-picture-no-pic-avatar.jpg"
+                "http://walyou.com/wp-content/uploads//2010/12/facebook-profile-picture-no-pic-avatar.jpg"
             }}
             style={styles.avatarStyle}
           />
@@ -96,8 +108,8 @@ class AnswerFeed extends Component {
             <Text style={styles.userNameStyle}>DungPS</Text>
             <Text style={styles.timeDiffStyle}>4 hours ago</Text>
           </View>
-          <Text style={{ color: 'white' }}>
-            {dataRow && dataRow.content_text}
+          <Text style={{ color: "white" }}>
+            {dataRow && dataRow.text_content}
           </Text>
         </View>
         <View style={{ flex: 0.05 }}>
@@ -108,7 +120,7 @@ class AnswerFeed extends Component {
             color="white"
             onPress={() => this._voteAction(rowId, "up")}
           />
-          <Text style={{ color: 'white' }}>+19</Text>
+          <Text style={{ color: "white" }}>+19</Text>
           <Icon
             type="font-awesome"
             name="chevron-down"
@@ -124,24 +136,29 @@ class AnswerFeed extends Component {
   /**
    * Render Ask Field
    */
-  _renderFooter() { }
+  _renderFooter() {}
 
-  _renderImage() {
-
-  }
+  _renderImage() {}
 
   /**
    * Render Question detail
    */
   _renderHeader() {
-    const Touchable = Platform.OS == 'android' ? TouchableNativeFeedback : TouchableHighlight;
+    const Touchable =
+      Platform.OS == "android" ? TouchableNativeFeedback : TouchableHighlight;
     const qData = this.props.navigation.state.params.data;
     return (
       <RkCard style={{ flex: 1 }}>
-        <Image rkCardImg source={{ uri: qData.image_url || qData.image }} style={{ flex: 1 }} />
+        <Image
+          rkCardImg
+          source={{ uri: qData.image_url || qData.image }}
+          style={{ flex: 1, height: 200, backgroundColor: "#ddd" }}
+        />
         <View rkCardHeader>
           <View>
-            <RkText style={{ fontSize: 18, fontWeight: 'bold' }}>{qData.title}</RkText>
+            <RkText style={{ fontSize: 18, fontWeight: "bold" }}>
+              {qData.title}
+            </RkText>
             <RkText>5 hours ago</RkText>
           </View>
         </View>
@@ -168,7 +185,7 @@ class AnswerFeed extends Component {
         style={{
           backgroundColor: "#0a1042",
           flex: 1,
-          flexDirection: 'column'
+          flexDirection: "column"
         }}
       >
         {}
@@ -233,7 +250,7 @@ const styles = {
     color: "rgba(0, 0, 0, .9)",
     textAlign: Platform.OS === "ios" ? "center" : "left",
     marginHorizontal: 16,
-    color: 'white'
+    color: "white"
   },
   itemHead: {
     flexDirection: "row",
@@ -241,12 +258,12 @@ const styles = {
   },
   userNameStyle: {
     // alignSelf: "left"
-    color: 'white',
+    color: "white",
     fontWeight: "bold"
   },
   timeDiffStyle: {
     // alignSelf: "left"
-    color: 'white',
+    color: "white",
     marginLeft: 5
   }
 };
