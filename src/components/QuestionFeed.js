@@ -139,7 +139,8 @@ class QuestionFeed extends Component {
       noPercent,
       otherPercent
     } = this._getAnswerObject(rowData);
-    const Touchable = TouchableHighlight;
+    const Touchable =
+      Platform.OS == "android" ? TouchableNativeFeedback : TouchableHighlight;
     let qID =
       parseInt(Object.keys(this.props.questions.posts).length) -
       1 -
@@ -154,130 +155,132 @@ class QuestionFeed extends Component {
           })}
         key={rowID}
       >
-        <RkCard
-          rkType="imgBlock"
-          style={{
-            marginVertical: 8,
-            backgroundColor: "#ddd",
-            borderTopLeftRadius: 50,
-            borderTopRightRadius: 50,
-            paddingHorizontal: 14
-          }}
-        >
-          {this._renderImage(rowData)}
-          <View
-            rkCardImgOverlay
-            rkCardContent
+        <View>
+          <RkCard
+            rkType="imgBlock"
             style={{
-              height: 85,
-              marginHorizontal: 14,
-              borderTopLeftRadius: 8,
-              borderTopRightRadius: 8
+              marginVertical: 8,
+              backgroundColor: "#ddd",
+              borderTopLeftRadius: 50,
+              borderTopRightRadius: 50,
+              paddingHorizontal: 14
             }}
           >
-            <RkText
-              rkType="header4 inverseColor"
-              style={{ color: "#ddd", fontSize: 18, fontWeight: "bold" }}
-            >
-              {rowData.title}
-            </RkText>
-            <RkText style={{ marginTop: 5, color: "white" }}>
-              5 hours ago
-            </RkText>
-          </View>
-          <View style={{ marginTop: 20, marginBottom: 20 }}>
+            {this._renderImage(rowData)}
             <View
+              rkCardImgOverlay
+              rkCardContent
               style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                flex: 1
+                height: 85,
+                marginHorizontal: 14,
+                borderTopLeftRadius: 8,
+                borderTopRightRadius: 8
               }}
             >
+              <RkText
+                rkType="header4 inverseColor"
+                style={{ color: "#ddd", fontSize: 18, fontWeight: "bold" }}
+              >
+                {rowData.title}
+              </RkText>
+              <RkText style={{ marginTop: 5, color: "white" }}>
+                5 hours ago
+              </RkText>
+            </View>
+            <View style={{ marginTop: 20, marginBottom: 20 }}>
               <View
                 style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
                   flex: 1
                 }}
               >
-                <Touchable style={{ flex: 1 }}>
-                  <View
-                    style={{
-                      alignItems: "center",
-                      backgroundColor: "#fff",
-                      paddingLeft: 20,
-                      paddingRight: 20,
-                      paddingTop: 10,
-                      paddingBottom: 10,
-                      borderRadius: 10,
-                      marginRight: 10,
-                      borderWidth: 0.5,
-                      borderColor: "#9ea4ab"
-                    }}
-                  >
-                    <Text
+                <View
+                  style={{
+                    flex: 1
+                  }}
+                >
+                  <Touchable style={{ flex: 1 }}>
+                    <View
                       style={{
-                        color: "#88c057",
-                        fontWeight: "bold",
-                        fontSize: 18
+                        alignItems: "center",
+                        backgroundColor: "#fff",
+                        paddingLeft: 20,
+                        paddingRight: 20,
+                        paddingTop: 10,
+                        paddingBottom: 10,
+                        borderRadius: 10,
+                        marginRight: 10,
+                        borderWidth: 0.5,
+                        borderColor: "#9ea4ab"
                       }}
-                    >{`${yes}`}</Text>
-                    <Text
+                    >
+                      <Text
+                        style={{
+                          color: "#88c057",
+                          fontWeight: "bold",
+                          fontSize: 18
+                        }}
+                      >{`${yes}`}</Text>
+                      <Text
+                        style={{
+                          color: "#9EA4AB",
+                          fontWeight: "bold",
+                          fontSize: 18
+                        }}
+                      >{`${rowData.option1}`}</Text>
+                    </View>
+                  </Touchable>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Touchable style={{ flex: 1 }}>
+                    <View
                       style={{
-                        color: "#9EA4AB",
-                        fontWeight: "bold",
-                        fontSize: 18
+                        alignItems: "center",
+                        backgroundColor: "#fff",
+                        paddingLeft: 20,
+                        paddingRight: 20,
+                        paddingTop: 10,
+                        paddingBottom: 10,
+                        borderRadius: 10,
+                        marginLeft: 10,
+                        borderWidth: 0.5,
+                        borderColor: "#9ea4ab"
                       }}
-                    >{`${rowData.option1}`}</Text>
-                  </View>
-                </Touchable>
-              </View>
-              <View style={{ flex: 1 }}>
-                <Touchable style={{ flex: 1 }}>
-                  <View
-                    style={{
-                      alignItems: "center",
-                      backgroundColor: "#fff",
-                      paddingLeft: 20,
-                      paddingRight: 20,
-                      paddingTop: 10,
-                      paddingBottom: 10,
-                      borderRadius: 10,
-                      marginLeft: 10,
-                      borderWidth: 0.5,
-                      borderColor: "#9ea4ab"
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: "#88c057",
-                        fontWeight: "bold",
-                        fontSize: 18
-                      }}
-                    >{`${no}`}</Text>
-                    <Text
-                      style={{
-                        color: "#9EA4AB",
-                        fontWeight: "bold",
-                        fontSize: 18
-                      }}
-                    >{`${rowData.option2}`}</Text>
-                  </View>
-                </Touchable>
+                    >
+                      <Text
+                        style={{
+                          color: "#88c057",
+                          fontWeight: "bold",
+                          fontSize: 18
+                        }}
+                      >{`${no}`}</Text>
+                      <Text
+                        style={{
+                          color: "#9EA4AB",
+                          fontWeight: "bold",
+                          fontSize: 18
+                        }}
+                      >{`${rowData.option2}`}</Text>
+                    </View>
+                  </Touchable>
+                </View>
               </View>
             </View>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              flex: 1,
-              height: 10,
-              borderRadius: 50
-            }}
-          >
-            <View style={{ backgroundColor: "#88c057", flex: yesPercent }} />
-            <View style={{ backgroundColor: "blue", flex: noPercent }} />
-            <View style={{ backgroundColor: "grey", flex: otherPercent }} />
-          </View>
-        </RkCard>
+            <View
+              style={{
+                flexDirection: "row",
+                flex: 1,
+                height: 10,
+                borderRadius: 50
+              }}
+            >
+              <View style={{ backgroundColor: "#88c057", flex: yesPercent }} />
+              <View style={{ backgroundColor: "blue", flex: noPercent }} />
+              <View style={{ backgroundColor: "grey", flex: otherPercent }} />
+            </View>
+          </RkCard>
+        </View>
       </Touchable>
     );
   }
