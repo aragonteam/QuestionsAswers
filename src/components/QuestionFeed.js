@@ -139,8 +139,7 @@ class QuestionFeed extends Component {
       noPercent,
       otherPercent
     } = this._getAnswerObject(rowData);
-    const Touchable =
-      Platform.OS == "android" ? TouchableNativeFeedback : TouchableHighlight;
+    const Touchable = TouchableHighlight;
     let qID =
       parseInt(Object.keys(this.props.questions.posts).length) -
       1 -
