@@ -36,6 +36,17 @@ const ds = new ListView.DataSource({
   rowHasChanged: (r1, r2) => r1 !== r2
 });
 
+RkTheme.setType("RkCard", "imgBlock", {
+  container: {
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8
+  },
+  img: {
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8
+  }
+});
+
 class QuestionFeed extends Component {
   state = {
     refreshing: false,
@@ -46,14 +57,14 @@ class QuestionFeed extends Component {
 
   static navigationOptions = ({ navigation }) => {
     return {
-      title: "Home",
+      title: "Question & Answer",
       headerTitleStyle: {
         color: "#fff",
-        alignItems: "center"
+        textAlign: "center"
       },
       headerLeft: null,
       headerStyle: {
-        backgroundColor: "#090e36"
+        backgroundColor: "#88c057"
       }
     };
   };
@@ -102,7 +113,16 @@ class QuestionFeed extends Component {
         <Image rkCardImg source={{ uri: rowData.image || rowData.image_url }} />
       );
     } else {
-      return <View rkCardImg style={{ backgroundColor: "#ddd" }} />;
+      return (
+        <View
+          rkCardImg
+          style={{
+            backgroundColor: "#fff",
+            borderTopLeftRadius: 8,
+            borderTopRightRadius: 8
+          }}
+        />
+      );
     }
   }
 
@@ -137,13 +157,28 @@ class QuestionFeed extends Component {
       >
         <RkCard
           rkType="imgBlock"
-          style={{ marginVertical: 8, backgroundColor: "#12194d" }}
+          style={{
+            marginVertical: 8,
+            backgroundColor: "#ddd",
+            borderTopLeftRadius: 50,
+            borderTopRightRadius: 50,
+            paddingHorizontal: 14
+          }}
         >
           {this._renderImage(rowData)}
-          <View rkCardImgOverlay rkCardContent style={{ height: 85 }}>
+          <View
+            rkCardImgOverlay
+            rkCardContent
+            style={{
+              height: 85,
+              marginHorizontal: 14,
+              borderTopLeftRadius: 8,
+              borderTopRightRadius: 8
+            }}
+          >
             <RkText
               rkType="header4 inverseColor"
-              style={{ color: "#fff", fontSize: 18, fontWeight: "bold" }}
+              style={{ color: "#ddd", fontSize: 18, fontWeight: "bold" }}
             >
               {rowData.title}
             </RkText>
@@ -151,7 +186,7 @@ class QuestionFeed extends Component {
               5 hours ago
             </RkText>
           </View>
-          <View style={{ padding: 20 }}>
+          <View style={{ marginTop: 20, marginBottom: 20 }}>
             <View
               style={{
                 flexDirection: "row",
@@ -161,26 +196,85 @@ class QuestionFeed extends Component {
             >
               <View
                 style={{
-                  marginRight: 10,
-                  justifyContent: "center",
-                  flex: 1,
-                  borderRightWidth: 1,
-                  borderRightColor: "#ddd"
+                  flex: 1
                 }}
               >
-                <RkButton rkType="clear">{`${yes == 0
-                  ? ""
-                  : yes} ${rowData.option1}`}</RkButton>
+                <Touchable style={{ flex: 1 }}>
+                  <View
+                    style={{
+                      alignItems: "center",
+                      backgroundColor: "#fff",
+                      paddingLeft: 20,
+                      paddingRight: 20,
+                      paddingTop: 10,
+                      paddingBottom: 10,
+                      borderRadius: 10,
+                      marginRight: 10,
+                      borderWidth: 0.5,
+                      borderColor: "#9ea4ab"
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "#88c057",
+                        fontWeight: "bold",
+                        fontSize: 18
+                      }}
+                    >{`${yes}`}</Text>
+                    <Text
+                      style={{
+                        color: "#9EA4AB",
+                        fontWeight: "bold",
+                        fontSize: 18
+                      }}
+                    >{`${rowData.option1}`}</Text>
+                  </View>
+                </Touchable>
               </View>
-              <View style={{ flex: 1, justifyContent: "center" }}>
-                <RkButton rkType="clear">{`${no == 0
-                  ? ""
-                  : no} ${rowData.option2}`}</RkButton>
+              <View style={{ flex: 1 }}>
+                <Touchable style={{ flex: 1 }}>
+                  <View
+                    style={{
+                      alignItems: "center",
+                      backgroundColor: "#fff",
+                      paddingLeft: 20,
+                      paddingRight: 20,
+                      paddingTop: 10,
+                      paddingBottom: 10,
+                      borderRadius: 10,
+                      marginLeft: 10,
+                      borderWidth: 0.5,
+                      borderColor: "#9ea4ab"
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "#88c057",
+                        fontWeight: "bold",
+                        fontSize: 18
+                      }}
+                    >{`${no}`}</Text>
+                    <Text
+                      style={{
+                        color: "#9EA4AB",
+                        fontWeight: "bold",
+                        fontSize: 18
+                      }}
+                    >{`${rowData.option2}`}</Text>
+                  </View>
+                </Touchable>
               </View>
             </View>
           </View>
-          <View style={{ flexDirection: "row", flex: 1, height: 5 }}>
-            <View style={{ backgroundColor: "green", flex: yesPercent }} />
+          <View
+            style={{
+              flexDirection: "row",
+              flex: 1,
+              height: 10,
+              borderRadius: 50
+            }}
+          >
+            <View style={{ backgroundColor: "#88c057", flex: yesPercent }} />
             <View style={{ backgroundColor: "blue", flex: noPercent }} />
             <View style={{ backgroundColor: "grey", flex: otherPercent }} />
           </View>
@@ -197,9 +291,8 @@ class QuestionFeed extends Component {
     return (
       <View
         style={{
-          backgroundColor: "#0a1042",
+          backgroundColor: "#ddd",
           paddingVertical: 8,
-          paddingHorizontal: 14,
           flex: 1
         }}
       >

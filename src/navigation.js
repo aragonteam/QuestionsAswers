@@ -14,8 +14,8 @@ import Introduction from "./components/Introduction";
 import CreateAnswer from "./components/CreateAnswer";
 import Login from "./components/Login";
 import ReactQuestion from "./components/ReactQuestion";
-import Search from './components/Search';
-import Profile from './components/Profile';
+import Search from "./components/Search";
+import Profile from "./components/Profile";
 
 import { HeaderBackButton } from "react-navigation";
 
@@ -30,10 +30,10 @@ const MainDrawerNavigator = TabNavigator(
   },
   {
     initialRouteName: "QuestionFeed",
-    tabBarPosition: 'bottom',
+    tabBarPosition: "bottom",
     tabBarOptions: {
       style: {
-        backgroundColor: '#060a25'
+        backgroundColor: "#060a25"
       }
     }
   }
@@ -46,7 +46,7 @@ const routeConfigs = {
   },
   // Home Screen (include: Drawer + Question Feed)
   Home: {
-    screen: MainDrawerNavigator
+    screen: QuestionFeed
   },
   // Create Question Screen
   CreateQuestion: {
