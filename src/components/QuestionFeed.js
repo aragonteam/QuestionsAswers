@@ -9,7 +9,8 @@ import {
   TouchableNativeFeedback,
   RefreshControl,
   Platform,
-  StyleSheet
+  StyleSheet,
+  StatusBar
 } from "react-native";
 import {
   RkTheme,
@@ -43,7 +44,8 @@ RkTheme.setType("RkCard", "imgBlock", {
   },
   img: {
     borderTopLeftRadius: 8,
-    borderTopRightRadius: 8
+    borderTopRightRadius: 8,
+    flex: 1
   }
 });
 
@@ -82,7 +84,7 @@ class QuestionFeed extends Component {
       all: 0,
       yesPercent: 1,
       noPercent: 1,
-      otherPercent: 1
+      totalvoted: 1
     };
 
     if (data.answers) {
@@ -92,15 +94,18 @@ class QuestionFeed extends Component {
           if (v && v.answerType) {
             if (v.answerType == data.option1) {
               result.yes = result.yes + 1;
+              result.totalvoted = result.totalvoted + 1;
             } else if (v.answerType == data.option2) {
               result.no = result.no + 1;
+              result.totalvoted = result.totalvoted + 1;
             }
           }
         });
 
-        result.yesPercent = result.yes / result.all;
-        result.noPercent = result.no == 0 ? 0 : result.no / result.all;
-        result.otherPercent = 1 - result.yesPercent - result.noPercent;
+        if (result.totalvoted > 0) {
+          result.yesPercent = result.yes / result.totalvoted;
+          result.noPercent = 1 - result.yesPercent;
+        }
       }
     }
 
@@ -179,7 +184,7 @@ class QuestionFeed extends Component {
             >
               <RkText
                 rkType="header4 inverseColor"
-                style={{ color: "#ddd", fontSize: 18, fontWeight: "bold" }}
+                style={{ color: "#fff", fontSize: 18, fontWeight: "bold" }}
               >
                 {rowData.title}
               </RkText>
@@ -271,13 +276,25 @@ class QuestionFeed extends Component {
               style={{
                 flexDirection: "row",
                 flex: 1,
-                height: 10,
-                borderRadius: 50
+                height: 8,
+                borderRadius: 50,
+                backgroundColor: "white"
               }}
             >
-              <View style={{ backgroundColor: "#88c057", flex: yesPercent }} />
-              <View style={{ backgroundColor: "blue", flex: noPercent }} />
-              <View style={{ backgroundColor: "grey", flex: otherPercent }} />
+              <View
+                style={{
+                  backgroundColor: "#88c057",
+                  flex: yesPercent,
+                  borderRadius: 10
+                }}
+              />
+              <View
+                style={{
+                  backgroundColor: "white",
+                  flex: noPercent,
+                  borderRadius: 10
+                }}
+              />
             </View>
           </RkCard>
         </View>
@@ -298,6 +315,7 @@ class QuestionFeed extends Component {
           flex: 1
         }}
       >
+        <StatusBar backgroundColor="#88c057" barStyle="light-content" />
         <ListView
           enableEmptySections
           dataSource={ds.cloneWithRows(this.props.questions.posts)}

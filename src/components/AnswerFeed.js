@@ -7,18 +7,35 @@ import {
   TouchableHighlight,
   TouchableNativeFeedback,
   Platform,
-  Button
+  Button,
+  StatusBar
 } from "react-native";
 import { Icon } from "react-native-elements";
-import { RkTabView, RkCard, RkText } from "react-native-ui-kitten";
+import { RkTheme, RkTabView, RkCard, RkText } from "react-native-ui-kitten";
 import { HeaderBackButton } from "react-navigation";
 import data from "../sample/AnswerFeed";
 import _ from "lodash";
 
+RkTheme.setType("RkCard", "imgBlock", {
+  container: {
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    borderWidth: 0
+  },
+  img: {
+    flex: 1
+  },
+  imgOverlay: {
+    opacity: 8
+  }
+});
+
 class AnswerFeed extends Component {
   static navigationOptions = ({ navigation }) => {
+    const Touchable =
+      Platform.OS == "android" ? TouchableNativeFeedback : TouchableHighlight;
     return {
-      title: navigation.state.params.data.title,
+      title: "Question",
       headerLeft: (
         <HeaderBackButton
           onPress={() => navigation.navigate("Home")}
@@ -26,14 +43,13 @@ class AnswerFeed extends Component {
         />
       ),
       headerStyle: {
-        backgroundColor: "#090e36"
+        backgroundColor: "#88c057"
       },
       headerTitleStyle: {
         color: "#fff"
       },
       headerRight: (
-        <Button
-          title="Answer"
+        <Touchable
           onPress={() =>
             navigation.navigate("CreateAnswer", {
               qID: navigation.state.params.qID,
@@ -41,7 +57,22 @@ class AnswerFeed extends Component {
               lastkey: Object.keys(navigation.state.params.data.answers || {})
                 .length
             })}
-        />
+        >
+          <Text
+            style={{
+              backgroundColor: "#fff",
+              color: "#88c057",
+              paddingHorizontal: 40,
+              paddingVertical: 10,
+              fontSize: 16,
+              fontWeight: "bold",
+              marginRight: 10,
+              borderRadius: 50
+            }}
+          >
+            Answer
+          </Text>
+        </Touchable>
       )
     };
   };
@@ -53,27 +84,35 @@ class AnswerFeed extends Component {
     this._renderHeader = this._renderHeader.bind(this);
   }
 
-  _getData() {
+  _getData(data) {
     let result = {
-      option1: [],
-      option2: [],
-      all: []
+      yes: 0,
+      no: 0,
+      all: 0,
+      yesPercent: 1,
+      noPercent: 1,
+      totalvoted: 1
     };
 
-    const data = this.props.navigation.state.params.data;
-
-    if (data.answers) {
-      if (!_.isEmpty(data.answers)) {
+    if (data && data.answers) {
+      result.all = Object.keys(data.answers).length;
+      if (result.all > 0 && !_.isEmpty(data.answers)) {
         _.forEach(data.answers, v => {
-          result.all.push(v);
           if (v && v.answerType) {
             if (v.answerType == data.option1) {
-              result.option1.push(v);
+              result.yes = result.yes + 1;
+              result.totalvoted = result.totalvoted + 1;
             } else if (v.answerType == data.option2) {
-              result.option2.push(2);
+              result.no = result.no + 1;
+              result.totalvoted = result.totalvoted + 1;
             }
           }
         });
+
+        if (result.totalvoted > 0) {
+          result.yesPercent = result.yes / result.totalvoted;
+          result.noPercent = 1 - result.yesPercent;
+        }
       }
     }
 
@@ -92,43 +131,38 @@ class AnswerFeed extends Component {
    * @param {object} dataRow 
    */
   _renderRow(dataRow, sectionID, rowId) {
+    //http://walyou.com/wp-content/uploads//2010/12/facebook-profile-picture-no-pic-avatar.jpg
     return (
       <View style={styles.wrapItem} key={rowId}>
-        <View style={{ flex: 0.1 }}>
+        <View style={{ flex: 1, flexDirection: "row" }}>
           <Image
+            style={{ width: 24, height: 24, borderRadius: 50 }}
             source={{
               uri:
                 "http://walyou.com/wp-content/uploads//2010/12/facebook-profile-picture-no-pic-avatar.jpg"
             }}
-            style={styles.avatarStyle}
           />
-        </View>
-        <View style={{ flex: 0.5 }}>
-          <View style={styles.itemHead}>
-            <Text style={styles.userNameStyle}>DungPS</Text>
-            <Text style={styles.timeDiffStyle}>4 hours ago</Text>
-          </View>
-          <Text style={{ color: "white" }}>
-            {dataRow && (dataRow.text_content || dataRow.content_text)}
+          <Text
+            style={{
+              flex: 0.6,
+              marginLeft: 10,
+              fontSize: 16,
+              fontWeight: "bold"
+            }}
+          >
+            Kevin
           </Text>
+          <View style={{ flex: 0.3, flexDirection: "row" }}>
+            <Icon type="font-awesome" name="plus-square" style={{ flex: 1 }} />
+            <Text style={{ flex: 1 }}>19</Text>
+            <Icon type="font-awesome" name="minus-square" style={{ flex: 1 }} />
+          </View>
         </View>
-        <View style={{ flex: 0.05 }}>
-          <Icon
-            type="font-awesome"
-            name="chevron-up"
-            size={18}
-            color="white"
-            onPress={() => this._voteAction(rowId, "up")}
-          />
-          <Text style={{ color: "white" }}>+19</Text>
-          <Icon
-            type="font-awesome"
-            name="chevron-down"
-            size={18}
-            color="white"
-            onPress={() => this._voteAction(rowId, "down")}
-          />
-        </View>
+        <Text
+          style={{ flex: 1, color: "#b2bbc0", marginTop: 5, marginBottom: 10 }}
+        >
+          {dataRow.text_content || dataRow.content_text}
+        </Text>
       </View>
     );
   }
@@ -138,7 +172,24 @@ class AnswerFeed extends Component {
    */
   _renderFooter() {}
 
-  _renderImage() {}
+  _renderImage(rowData) {
+    if (rowData.image_url || rowData.image) {
+      return (
+        <Image rkCardImg source={{ uri: rowData.image || rowData.image_url }} />
+      );
+    } else {
+      return (
+        <View
+          rkCardImg
+          style={{
+            backgroundColor: "#fff",
+            borderTopLeftRadius: 8,
+            borderTopRightRadius: 8
+          }}
+        />
+      );
+    }
+  }
 
   /**
    * Render Question detail
@@ -147,52 +198,156 @@ class AnswerFeed extends Component {
     const Touchable =
       Platform.OS == "android" ? TouchableNativeFeedback : TouchableHighlight;
     const qData = this.props.navigation.state.params.data;
+    const { yes, no, all, yesPercent, noPercent } = this._getData(qData);
     return (
-      <RkCard style={{ flex: 1 }}>
-        <Image
-          rkCardImg
-          source={{ uri: qData.image_url || qData.image }}
-          style={{ flex: 1, height: 200, backgroundColor: "#ddd" }}
-        />
-        <View rkCardHeader>
-          <View>
-            <RkText style={{ fontSize: 18, fontWeight: "bold" }}>
-              {qData.title}
-            </RkText>
-            <RkText>5 hours ago</RkText>
+      <RkCard
+        rkType="imgBlock"
+        style={{
+          marginVertical: 8,
+          backgroundColor: "#fff",
+          borderTopLeftRadius: 50,
+          borderTopRightRadius: 50,
+          paddingHorizontal: 10
+        }}
+      >
+        {this._renderImage(qData)}
+        <View
+          rkCardImgOverlay
+          rkCardContent
+          style={{
+            height: 85,
+            marginHorizontal: 14,
+            borderTopLeftRadius: 8,
+            borderTopRightRadius: 8
+          }}
+        >
+          <RkText
+            rkType="header4 inverseColor"
+            style={{ color: "#fff", fontSize: 18, fontWeight: "bold" }}
+          >
+            {qData.title}
+          </RkText>
+          <RkText style={{ marginTop: 5, color: "white" }}>5 hours ago</RkText>
+        </View>
+        <View style={{ marginTop: 20, marginBottom: 20 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              flex: 1
+            }}
+          >
+            <View
+              style={{
+                flex: 1
+              }}
+            >
+              <Touchable style={{ flex: 1 }}>
+                <View
+                  style={{
+                    alignItems: "center",
+                    borderRightWidth: 1,
+                    backgroundColor: "#fff",
+                    borderRightColor: "#b2bbc0"
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#88c057",
+                      fontWeight: "bold",
+                      fontSize: 18
+                    }}
+                  >{`${yes}`}</Text>
+                  <Text
+                    style={{
+                      color: "#9EA4AB",
+                      fontWeight: "bold",
+                      fontSize: 18
+                    }}
+                  >{`${qData.option1}`}</Text>
+                </View>
+              </Touchable>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Touchable style={{ flex: 1 }}>
+                <View
+                  style={{
+                    alignItems: "center",
+                    backgroundColor: "#fff"
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#88c057",
+                      fontWeight: "bold",
+                      fontSize: 18
+                    }}
+                  >{`${no}`}</Text>
+                  <Text
+                    style={{
+                      color: "#9EA4AB",
+                      fontWeight: "bold",
+                      fontSize: 18
+                    }}
+                  >{`${qData.option2}`}</Text>
+                </View>
+              </Touchable>
+            </View>
           </View>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            flex: 1,
+            height: 8,
+            borderRadius: 50,
+            backgroundColor: "white"
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "#88c057",
+              flex: yesPercent,
+              borderRadius: 10
+            }}
+          />
+          <View
+            style={{
+              backgroundColor: "#b2bbc0",
+              flex: noPercent,
+              borderTopRightRadius: 10,
+              borderBottomRightRadius: 10
+            }}
+          />
         </View>
       </RkCard>
     );
   }
 
   render() {
-    const data = this._getData();
     const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 != r2
-    });
-
-    const option1 = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 != r2
-    });
-
-    const option2 = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 != r2
     });
 
     return (
       <View
         style={{
-          backgroundColor: "#0a1042",
+          backgroundColor: "#fff",
           flex: 1,
           flexDirection: "column"
         }}
       >
-        {}
+        <StatusBar backgroundColor="#88c057" barStyle="light-content" />
         <ListView
-          style={{ flex: 1 }}
+          style={{
+            flex: 1,
+            paddingVertical: 8,
+            paddingHorizontal: 8
+          }}
           enableEmptySections
-          dataSource={ds.cloneWithRows(data.all)}
+          dataSource={ds.cloneWithRows(
+            this.props.navigation.state.params.data.answers || []
+          )}
           renderHeader={this._renderHeader.bind(this)}
           renderFooter={this._renderFooter.bind(this)}
           renderRow={this._renderRow.bind(this)}
@@ -232,39 +387,13 @@ class AnswerFeed extends Component {
 }
 
 const styles = {
-  avatarStyle: {
-    width: 48,
-    height: 48,
-    borderRadius: 50,
-    borderWidth: 1
-  },
   wrapItem: {
-    flexDirection: "row",
+    flexDirection: "column",
     flex: 1,
     padding: 10,
-    marginBottom: 5
-  },
-  headerTitle: {
-    fontSize: Platform.OS === "ios" ? 17 : 20,
-    fontWeight: Platform.OS === "ios" ? "600" : "500",
-    color: "rgba(0, 0, 0, .9)",
-    textAlign: Platform.OS === "ios" ? "center" : "left",
-    marginHorizontal: 16,
-    color: "white"
-  },
-  itemHead: {
-    flexDirection: "row",
-    flex: 1
-  },
-  userNameStyle: {
-    // alignSelf: "left"
-    color: "white",
-    fontWeight: "bold"
-  },
-  timeDiffStyle: {
-    // alignSelf: "left"
-    color: "white",
-    marginLeft: 5
+    marginTop: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#b2bbc0"
   }
 };
 

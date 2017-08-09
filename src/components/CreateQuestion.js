@@ -7,15 +7,19 @@ import {
   Image,
   Button,
   StyleSheet,
-  TouchableHighlight
+  TouchableHighlight,
+  Platform,
+  TouchableNativeFeedback
 } from "react-native";
 import PhotoUpload from "react-native-photo-upload";
+import Icon from "react-native-vector-icons/FontAwesome";
 import firebaseApp from "../firebase/firebase";
 import ModalDropdown from "react-native-modal-dropdown";
 import moment from "moment";
 import { getQuestions } from "../actions";
 import { connect } from "react-redux";
 import _ from "lodash";
+import { HeaderBackButton } from "react-navigation";
 
 class CreateQuestion extends Component {
   constructor(props) {
@@ -32,6 +36,7 @@ class CreateQuestion extends Component {
       option2: ""
     };
     this.writeDB = this.writeDB.bind(this);
+    this._renderUploadImage = this._renderUploadImage.bind(this);
   }
 
   writeDB() {
@@ -80,9 +85,40 @@ class CreateQuestion extends Component {
   }
   static navigationOptions = ({ navigation }) => {
     const { goToQuestionFeed } = navigation.state.params || {};
+    const Touchable =
+      Platform.OS == "android" ? TouchableNativeFeedback : TouchableHighlight;
     return {
       title: "Create Question",
-      headerRight: <Button title="Post" onPress={goToQuestionFeed} />
+      headerLeft: (
+        <HeaderBackButton
+          onPress={() => navigation.navigate("Home")}
+          tintColor="white"
+        />
+      ),
+      headerStyle: {
+        backgroundColor: "#88c057"
+      },
+      headerTitleStyle: {
+        color: "#fff"
+      },
+      headerRight: (
+        <Touchable onPress={goToQuestionFeed}>
+          <Text
+            style={{
+              backgroundColor: "#fff",
+              color: "#88c057",
+              paddingHorizontal: 40,
+              paddingVertical: 10,
+              fontSize: 16,
+              fontWeight: "bold",
+              marginRight: 10,
+              borderRadius: 50
+            }}
+          >
+            Save
+          </Text>
+        </Touchable>
+      )
     };
   };
   componentDidMount() {
@@ -100,160 +136,123 @@ class CreateQuestion extends Component {
     this.setState({ title: value });
   }
 
-  _dropdown_renderRow(rowData, rowID, highlighted) {
-    let icon = highlighted
-      ? require("../resources/heart.png")
-      : require("../resources/uncheck.png");
-    return (
-      <TouchableHighlight underlayColor="white">
-        <View style={[styles.dropdown_row, { backgroundColor: "white" }]}>
-          <Text
-            style={[
-              styles.dropdown_row_text,
-              highlighted && { color: "mediumaquamarine" }
-            ]}
-          >
-            {`${rowData}`}
-          </Text>
-          <Image style={styles.dropdown_image} mode="stretch" source={icon} />
-        </View>
-      </TouchableHighlight>
-    );
-  }
-  render() {
-    var base64Icon =
-      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAwBQTFRF7c5J78kt+/Xm78lQ6stH5LI36bQh6rcf7sQp671G89ZZ8c9V8c5U9+u27MhJ/Pjv9txf8uCx57c937Ay5L1n58Nb67si8tVZ5sA68tJX/Pfr7dF58tBG9d5e8+Gc6chN6LM+7spN1pos6rYs6L8+47hE7cNG6bQc9uFj7sMn4rc17cMx3atG8duj+O7B686H7cAl7cEm7sRM26cq/vz5/v767NFY7tJM78Yq8s8y3agt9dte6sVD/vz15bY59Nlb8txY9+y86LpA5LxL67pE7L5H05Ai2Z4m58Vz89RI7dKr+/XY8Ms68dx/6sZE7sRCzIEN0YwZ67wi6rk27L4k9NZB4rAz7L0j5rM66bMb682a5sJG6LEm3asy3q0w3q026sqC8cxJ6bYd685U5a457cIn7MBJ8tZW7c1I7c5K7cQ18Msu/v3678tQ3aMq7tNe6chu6rgg79VN8tNH8c0w57Q83akq7dBb9Nld9d5g6cdC8dyb675F/v327NB6////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/LvB3QAAAMFJREFUeNpiqIcAbz0ogwFKm7GgCjgyZMihCLCkc0nkIAnIMVRw2UhDBGp5fcurGOyLfbhVtJwLdJkY8oscZCsFPBk5spiNaoTC4hnqk801Qi2zLQyD2NlcWWP5GepN5TOtSxg1QwrV01itpECG2kaLy3AYiCWxcRozQWyp9pNMDWePDI4QgVpbx5eo7a+mHFOqAxUQVeRhdrLjdFFQggqo5tqVeSS456UEQgWE4/RBboxyC4AKCEI9Wu9lUl8PEGAAV7NY4hyx8voAAAAASUVORK5CYII=";
-    const categoryOptions = [
-      "Food",
-      "Music",
-      "Science",
-      "Fashion",
-      "Religion",
-      "Brands",
-      "Art",
-      "Gaming",
-      "Economics",
-      "News",
-      "Politics",
-      "Society",
-      "Tech",
-      "TV & Movie"
-    ];
-    let dropdown_icon = this.state.dropdown_icon_heart
-      ? require("../resources/heart.png")
-      : require("../resources/uncheck.png");
-    return (
-      <View style={{ flex: 1 }}>
-        <StatusBar backgroundColor="yellow" barStyle="light-content" />
-        <View style={{ paddingTop: 5, backgroundColor: "white" }}>
-          <View style={{ marginTop: 20, height: 20 }}>
-            <PhotoUpload
-              onPhotoSelect={avatar => {
-                if (avatar) {
-                  console.log("Image base64 string: ", avatar);
-                  this.setState({
-                    image: "data:image/png;base64," + avatar
-                  });
-                }
-              }}
-            >
-              <Image
-                style={{
-                  paddingTop: 30,
-                  width: 40,
-                  height: 40
-                }}
-                resizeMode="cover"
-                source={require("../resources/icon_image.png")}
-              />
-            </PhotoUpload>
-          </View>
-          <View
-            style={{
-              backgroundColor: "white",
-              width: "100%",
-              height: 100,
-              marginTop: 40
+  _renderUploadImage() {
+    const Touchable =
+      Platform.OS == "android" ? TouchableNativeFeedback : TouchableHighlight;
+    if (this.state.image) {
+      return (
+        <View style={{ height: 250, position: "relative" }}>
+          <Image
+            resizeMode="cover"
+            source={{ uri: this.state.image }}
+            style={{ flex: 1, height: 250 }}
+          />
+          <PhotoUpload
+            containerStyle={{
+              backgroundColor: "transparent",
+              position: "absolute",
+              right: 10,
+              top: 10
+            }}
+            onPhotoSelect={avatar => {
+              if (avatar) {
+                this.setState({
+                  image: "data:image/png;base64," + avatar
+                });
+              }
             }}
           >
-            <TextInput
-              onChangeText={value => this.countLetters(value)}
-              editable={true}
-              maxLength={140}
-              multiline={true}
-              numberOfLines={3}
-              placeholder="Enter your question title here"
-              autoFocus={true}
-              style={{
-                margin: 10,
-                fontSize: 17,
-                height: "85%",
-                paddingBottom: 0
-              }}
-            />
-          </View>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <TextInput
-              style={{
-                height: 40,
-                width: 80,
-                borderColor: "gray",
-                borderWidth: 1,
-                marginBottom: 20,
-                marginLeft: 20,
-                borderRadius: 7,
-                textAlign: "center",
-                backgroundColor: "cornflowerblue"
-              }}
-              onChangeText={option1 => this.setState({ option1 })}
-              value={this.state.option1}
-              placeholder="option1"
-            />
-            <TextInput
-              style={{
-                height: 40,
-                width: 80,
-                borderColor: "gray",
-                borderWidth: 1,
-                marginBottom: 20,
-                marginRight: 20,
-                borderRadius: 7,
-                textAlign: "center",
-                backgroundColor: "mediumaquamarine"
-              }}
-              onChangeText={option2 => this.setState({ option2 })}
-              value={this.state.option2}
-              placeholder="option2"
-            />
-          </View>
-          <View style={{ marginBottom: 20 }}>
-            <ModalDropdown
-              style={{
-                marginLeft: 6,
-                paddingTop: 4,
-                paddingBottom: 6,
-                backgroundColor: "#d11141",
-                borderRadius: 5,
-                borderWidth: 1,
-                borderColor: "silver",
-                marginTop: 2,
-                marginLeft: 8,
-                marginRight: 8
-              }}
-              textStyle={(styles.dropdown_text, styles.dropdown_row_text)}
-              defaultIndex={this.state.selectedCategory}
-              dropdownStyle={styles.dropdown_dropdown}
-              options={categoryOptions}
-              onSelect={(index, value) =>
-                this.setState({
-                  selectedCategory: { index: index, text: value }
-                })}
-              renderRow={this._dropdown_renderRow.bind(this)}
-            />
-          </View>
+            <Icon name="camera" size={32} color="white" />
+          </PhotoUpload>
         </View>
+      );
+    } else {
+      return (
+        <View style={{ height: 250 }}>
+          <PhotoUpload
+            containerStyle={{ backgroundColor: "#ddd" }}
+            onPhotoSelect={avatar => {
+              if (avatar) {
+                this.setState({
+                  image: "data:image/png;base64," + avatar
+                });
+              }
+            }}
+          >
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                padding: 50,
+                backgroundColor: "#ddd"
+              }}
+            >
+              <Icon name="camera" size={80} />
+              <Text style={{ fontWeight: "bold", fontSize: 18, marginTop: 5 }}>
+                UPLOAD QUESTION COVER IMAGE
+              </Text>
+            </View>
+          </PhotoUpload>
+        </View>
+      );
+    }
+  }
+
+  render() {
+    const Touchable =
+      Platform.OS == "android" ? TouchableNativeFeedback : TouchableHighlight;
+    return (
+      <View style={{ flex: 1, backgroundColor: "#fff" }}>
+        <StatusBar backgroundColor="#88c057" barStyle="light-content" />
+        {this._renderUploadImage()}
+        <TextInput
+          placeholder="Question Title"
+          onChangeText={text =>
+            this.setState({
+              title: text
+            })}
+          value={this.state.title}
+          underlineColorAndroid={"transparent"}
+          style={{
+            borderBottomWidth: 1,
+            borderBottomColor: "#b2bbc0",
+            paddingLeft: 20,
+            fontWeight: "bold",
+            fontSize: 16
+          }}
+        />
+        <TextInput
+          placeholder="Option 1"
+          onChangeText={text =>
+            this.setState({
+              option1: text
+            })}
+          value={this.state.option1}
+          underlineColorAndroid={"transparent"}
+          style={{
+            borderBottomWidth: 1,
+            borderBottomColor: "#b2bbc0",
+            paddingLeft: 20,
+            fontWeight: "bold",
+            fontSize: 16
+          }}
+        />
+        <TextInput
+          placeholder="Option 2"
+          onChangeText={text =>
+            this.setState({
+              option2: text
+            })}
+          value={this.state.option2}
+          underlineColorAndroid={"transparent"}
+          style={{
+            borderBottomWidth: 1,
+            borderBottomColor: "#b2bbc0",
+            paddingLeft: 20,
+            fontWeight: "bold",
+            fontSize: 16
+          }}
+        />
       </View>
     );
   }
