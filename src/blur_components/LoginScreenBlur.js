@@ -1,3 +1,5 @@
+<script src="http://192.168.10.103:8097"></script>
+
 import React, {Component} from 'react';
 import {
   StyleSheet,
@@ -52,9 +54,9 @@ export default class LoginScreenBlur extends Component {
               <View style={styles.widthLimit}>
                 <RkButton innerStyle={styles.buttonInner}
                           style={styles.buttonContainer}
-                          rkType='circle shadow'
-                          onPress={() => super._renderMainScreen()}>
-                  <RkText>Log In</RkText>
+                          rkType='circle shadow blurText'
+                          onPress={() => {}}>
+                  <RkText >Log In</RkText>
                 </RkButton>
               </View>
             </View>
@@ -119,7 +121,8 @@ let styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'left',
     height: 40,
-    marginHorizontal: 10
+    marginHorizontal: 10,
+    color: 'white'
   },
   footText: {
     marginVertical: 30,
@@ -134,12 +137,12 @@ let styles = StyleSheet.create({
     shadowRadius: 12,
     shadowOpacity: 0.4,
     marginTop: 40,
+    alignSelf: 'center'
   },
   buttonInner: {
     fontSize: 22,
-    color: 'white',
   },
   extraBold: {
-    fontWeight: '700'
+    fontWeight: '700',
   }
 });
