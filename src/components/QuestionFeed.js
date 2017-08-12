@@ -71,6 +71,12 @@ class QuestionFeed extends Component {
     };
   };
 
+  constructor() {
+    super();
+
+    this.createVote = this.createVote.bind(this);
+  }
+
   componentWillMount() {
     this.props.getQuestions().then(() => {
       console.log(this.props.questions.posts);
@@ -112,6 +118,43 @@ class QuestionFeed extends Component {
     return result;
   }
 
+  createVote(option, qID, rowData, answerID) {
+    var date = new Date();
+    var milliseconds = date.getTime();
+    var currentTime = milliseconds / 1000;
+    var lastkey = Object.keys(rowData.answers || {}).length;
+    if (_.isEmpty(answerID)) {
+      var anwersRef = firebaseApp.database().ref(`questions/${qID}/answers`);
+      anwersRef.transaction(
+        answers => {
+          if (!answers) {
+            answers = {};
+          }
+          answers[lastkey] = {
+            answerType: option,
+            user_id: 2
+          };
+          return answers;
+        },
+        () => {
+          this.props.getQuestions();
+        }
+      );
+    } else {
+      var anwersRef = firebaseApp
+        .database()
+        .ref(`questions/${qID}/answers/${answerID}`);
+      anwersRef.update(
+        {
+          answerType: option
+        },
+        () => {
+          this.props.getQuestions();
+        }
+      );
+    }
+  }
+
   _renderImage(rowData) {
     if (rowData.image_url || rowData.image) {
       return (
@@ -150,6 +193,9 @@ class QuestionFeed extends Component {
       parseInt(Object.keys(this.props.questions.posts).length) -
       1 -
       parseInt(rowID);
+
+    let isAnswered = _.findKey(rowData.answers, o => o.user_id == 2);
+    var _date = moment.unix(rowData.created_time);
     return (
       <Touchable
         onPress={() =>
@@ -189,7 +235,7 @@ class QuestionFeed extends Component {
                 {rowData.title}
               </RkText>
               <RkText style={{ marginTop: 5, color: "white" }}>
-                5 hours ago
+                {_date.fromNow()}
               </RkText>
             </View>
             <View style={{ marginTop: 20, marginBottom: 20 }}>
@@ -205,7 +251,17 @@ class QuestionFeed extends Component {
                     flex: 1
                   }}
                 >
-                  <Touchable style={{ flex: 1 }}>
+                  <Touchable
+                    style={{ flex: 1 }}
+                    onPress={() => {
+                      this.createVote(
+                        rowData.option1,
+                        qID,
+                        rowData,
+                        isAnswered
+                      );
+                    }}
+                  >
                     <View
                       style={{
                         alignItems: "center",
@@ -238,7 +294,17 @@ class QuestionFeed extends Component {
                   </Touchable>
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Touchable style={{ flex: 1 }}>
+                  <Touchable
+                    style={{ flex: 1 }}
+                    onPress={() => {
+                      this.createVote(
+                        rowData.option2,
+                        qID,
+                        rowData,
+                        isAnswered
+                      );
+                    }}
+                  >
                     <View
                       style={{
                         alignItems: "center",

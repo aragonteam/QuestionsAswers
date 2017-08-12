@@ -13,8 +13,10 @@ import {
 import { Icon } from "react-native-elements";
 import { RkTheme, RkTabView, RkCard, RkText } from "react-native-ui-kitten";
 import { HeaderBackButton } from "react-navigation";
-import data from "../sample/AnswerFeed";
+import users from "../sample/user";
 import _ from "lodash";
+import { Gravatar, GravatarApi } from "react-native-gravatar";
+import moment from "moment";
 
 RkTheme.setType("RkCard", "imgBlock", {
   container: {
@@ -34,6 +36,11 @@ class AnswerFeed extends Component {
   static navigationOptions = ({ navigation }) => {
     const Touchable =
       Platform.OS == "android" ? TouchableNativeFeedback : TouchableHighlight;
+
+    let isAnswered = _.findKey(
+      navigation.state.params.data.answers,
+      o => o.user_id == 2
+    );
     return {
       title: "Question",
       headerLeft: (
@@ -55,7 +62,9 @@ class AnswerFeed extends Component {
               qID: navigation.state.params.qID,
               rowID: navigation.state.params.rowID,
               lastkey: Object.keys(navigation.state.params.data.answers || {})
-                .length
+                .length,
+              isAnswered: isAnswered,
+              answerData: navigation.state.params.data.answers || {}
             })}
         >
           <Text
@@ -131,15 +140,23 @@ class AnswerFeed extends Component {
    * @param {object} dataRow 
    */
   _renderRow(dataRow, sectionID, rowId) {
+    if (
+      dataRow &&
+      _.isEmpty(dataRow.text_content) &&
+      _.isEmpty(dataRow.content_text)
+    ) {
+      return null;
+    }
     //http://walyou.com/wp-content/uploads//2010/12/facebook-profile-picture-no-pic-avatar.jpg
     return (
       <View style={styles.wrapItem} key={rowId}>
         <View style={{ flex: 1, flexDirection: "row" }}>
-          <Image
+          <Gravatar
             style={{ width: 24, height: 24, borderRadius: 50 }}
-            source={{
-              uri:
-                "http://walyou.com/wp-content/uploads//2010/12/facebook-profile-picture-no-pic-avatar.jpg"
+            options={{
+              email: users[dataRow.user_id].email,
+              parameters: { size: 24, d: "mm" },
+              secure: false
             }}
           />
           <Text
@@ -152,14 +169,15 @@ class AnswerFeed extends Component {
           >
             Kevin
           </Text>
-          <View style={{ flex: 0.3, flexDirection: "row" }}>
-            <Icon type="font-awesome" name="plus-square" style={{ flex: 1 }} />
-            <Text style={{ flex: 1 }}>19</Text>
-            <Icon type="font-awesome" name="minus-square" style={{ flex: 1 }} />
-          </View>
         </View>
         <Text
-          style={{ flex: 1, color: "#b2bbc0", marginTop: 5, marginBottom: 10 }}
+          style={{
+            flex: 1,
+            color: "#b2bbc0",
+            marginTop: 5,
+            marginBottom: 10,
+            fontSize: 14
+          }}
         >
           {dataRow.text_content || dataRow.content_text}
         </Text>
@@ -199,6 +217,8 @@ class AnswerFeed extends Component {
       Platform.OS == "android" ? TouchableNativeFeedback : TouchableHighlight;
     const qData = this.props.navigation.state.params.data;
     const { yes, no, all, yesPercent, noPercent } = this._getData(qData);
+    let isAnswered = _.findKey(qData.answers, o => o.user_id == 2);
+    var _date = moment.unix(qData.created_time);
     return (
       <RkCard
         rkType="imgBlock"
@@ -227,7 +247,9 @@ class AnswerFeed extends Component {
           >
             {qData.title}
           </RkText>
-          <RkText style={{ marginTop: 5, color: "white" }}>5 hours ago</RkText>
+          <RkText style={{ marginTop: 5, color: "white" }}>
+            {_date.fromNow()}
+          </RkText>
         </View>
         <View style={{ marginTop: 20, marginBottom: 20 }}>
           <View

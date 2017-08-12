@@ -33,37 +33,61 @@ class CreateAnswer extends Component {
     var currentTime = milliseconds / 1000;
     let _text_content = this.state.title;
     let img = this.state.image;
-
-    this.anwersRef.transaction(
-      answers => {
-        if (!answers) {
-          answers = {};
-        }
-        answers[this.props.navigation.state.params.lastkey] = {
-          created_time: currentTime,
-          text_content: _text_content,
-          answerType: "neutral",
-          comments: {},
-          image_content: img,
-          downvote_number: 0,
-          upvote_number: 0,
-          question_id: 0,
-          user_id: 1
-        };
-        return answers;
-      },
-      (err, commited, snapshot) => {
-        this.props.getQuestions().then(() => {
-          this.props.navigation.navigate("AnswerFeed", {
-            data: this.props.questions.posts[
-              this.props.navigation.state.params.rowID
-            ],
-            qID: this.props.navigation.state.params.qID,
-            rowID: this.props.navigation.state.params.rowID
+    if (this.props.navigation.state.params.isAnswered) {
+      var anwersRef = firebaseApp
+        .database()
+        .ref(
+          `questions/${this.props.navigation.state.params.qID}/answers/${this
+            .props.navigation.state.params.isAnswered}`
+        );
+      anwersRef.update(
+        {
+          text_content: _text_content
+        },
+        (err, commited, snapshot) => {
+          this.props.getQuestions().then(() => {
+            this.props.navigation.navigate("AnswerFeed", {
+              data: this.props.questions.posts[
+                this.props.navigation.state.params.rowID
+              ],
+              qID: this.props.navigation.state.params.qID,
+              rowID: this.props.navigation.state.params.rowID
+            });
           });
-        });
-      }
-    );
+        }
+      );
+    } else {
+      var anwersRef = firebaseApp
+        .database()
+        .ref(`questions/${this.props.navigation.state.params.qID}/answers`);
+      anwersRef.transaction(
+        answers => {
+          if (!answers) {
+            answers = {};
+          }
+          answers[this.props.navigation.state.params.lastkey] = {
+            created_time: currentTime,
+            text_content: _text_content,
+            answerType: "neutral",
+            downvote_number: 0,
+            upvote_number: 0,
+            user_id: 2
+          };
+          return answers;
+        },
+        (err, commited, snapshot) => {
+          this.props.getQuestions().then(() => {
+            this.props.navigation.navigate("AnswerFeed", {
+              data: this.props.questions.posts[
+                this.props.navigation.state.params.rowID
+              ],
+              qID: this.props.navigation.state.params.qID,
+              rowID: this.props.navigation.state.params.rowID
+            });
+          });
+        }
+      );
+    }
   }
   static navigationOptions = ({ navigation }) => {
     const { goToAnswerFeed } = navigation.state.params || {};
@@ -97,16 +121,13 @@ class CreateAnswer extends Component {
       )
     };
   };
+
   componentDidMount() {
     let { navigation } = this.props;
 
     navigation.setParams({
       goToAnswerFeed: () => this.goToAnswerFeed()
     });
-
-    this.anwersRef = firebaseApp
-      .database()
-      .ref(`questions/${this.props.navigation.state.params.qID}/answers`);
   }
   goToAnswerFeed() {
     this.writeDB();
@@ -133,6 +154,7 @@ class CreateAnswer extends Component {
             borderBottomWidth: 1,
             borderBottomColor: "#b2bbc0"
           }}
+          value={this.state.title}
         />
       </View>
     );

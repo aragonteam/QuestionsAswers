@@ -36,10 +36,7 @@ class SplashScreen extends Component {
             backgroundColor: "white"
           }}
         >
-          <Image
-            source={require("../res/qa_logo.png")}
-            style={styles.logo}
-          />
+          <Image source={require("../res/qa_logo.png")} style={styles.logo} />
           <Text style={styles.slogan}>Ideas Worth Spreadings</Text>
         </View>
       </ScrollView>
@@ -69,12 +66,12 @@ const styles = StyleSheet.create({
   },
   slogan: {
     marginTop: 10,
-    fontSize: 15,
+    fontSize: 20,
     color: "#B0B0B0"
   },
   logo: {
     width: 200,
-    height: 76
+    height: 229
   }
 });
 

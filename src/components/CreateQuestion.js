@@ -67,16 +67,16 @@ class CreateQuestion extends Component {
           option1: _option1,
           option2: _option2,
           categories: selectedCategory,
-          created_time: currentTime
+          created_time: currentTime,
+          user_id: 2
         };
 
         return currentData;
       },
       (err, commited, snapshot) => {
         // if (!err && commited) {
-        this.props.getQuestions().then(() => {
-          this.props.navigation.navigate("QuestionFeed");
-        });
+        this.props.getQuestions();
+        this.props.navigation.navigate("QuestionFeed");
         // }
       }
     );
